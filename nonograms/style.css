@@ -2,8 +2,14 @@
     font-family: "Reggae One", serif;
     font-weight: 400;
     font-style: normal;
-  }
-  
+}
+.jost {
+    font-family: "Jost", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -17,4 +23,160 @@ html, body {
 body {
     display: flex;
     justify-content: center;
+}
+
+/* START GAME  */
+
+.start-screen {
+    width: 90%;
+    height: auto;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    /*background-color: rgb(192, 192, 192);*/
+}
+.title {
+    width: auto;
+    height: auto;
+    margin: 0;
+    text-align: center;
+    font-family: "Reggae One", serif;
+    font-size: clamp(2rem, 10vw, 10rem);
+    color: rgb(0, 51, 25);
+}
+.start-button {
+    width: 40%;
+    height: auto;
+    margin: auto;
+    padding: 0.5rem;
+    border: 0.2rem solid rgb(0, 51, 25);
+    border-radius: 1.5rem;
+    text-align: center;
+    font-family: "Jost", serif;
+    font-size: 3rem;
+    transition: transform 0.2s;
+}
+.start-button:hover {
+    background-color: rgb(0, 51, 25);
+    color: white;
+    transform: scale(1.05); 
+}
+.level-div {
+    width: 100%;
+    height: auto;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+    font-family: "Jost", serif;
+}
+.choose-level {
+    width: 90%;
+    height: auto;
+    margin: auto;
+    text-align: center;
+    font-family: "Reggae One", serif;
+    font-size: 3rem;
+    color: rgb(0, 51, 25);
+}
+.level-buttons {
+    width: 100%;
+    height: auto;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5rem;
+}
+.easy-button,
+.medium-button,
+.hard-button {
+    width: 15rem;
+    height: auto;
+    padding: 0.1rem;
+    border: 0.2rem solid rgb(0, 51, 25);
+    border-radius: 1.5rem;
+    text-align: center;
+    font-family: "Jost", serif;
+    font-size: 2.5rem;
+    transition: transform 0.2s;
+}
+.easy-button:hover,
+.medium-button:hover,
+.hard-button:hover {
+    background-color: rgb(0, 51, 25);
+    color: white;
+    transform: scale(1.05); 
+}
+/* MEDIA */
+
+@media screen and (max-width: 1000px) {
+    .easy-button,
+    .medium-button,
+    .hard-button {
+        width: 10rem;
+        font-size: 2rem;
+    }
+}
+@media screen and (max-width: 830px) {
+    .start-button {
+        font-size: 2rem;
+        padding: 0.4rem;
+    }
+}
+
+@media screen and (max-width: 715px) {
+    .choose-level {
+        font-size: 2rem;
+    }
+    .level-buttons {
+        gap: 3rem;
+    }
+    .easy-button,
+    .medium-button,
+    .hard-button {
+        width: 10rem;
+        font-size: 1.5rem;
+        border-radius: 1.1rem;
+    }
+}
+@media screen and (max-width: 600px) {
+    .level-buttons {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+    }
+    .easy-button,
+    .medium-button,
+    .hard-button {
+        width: 8rem;
+        font-size: 1.5rem;
+    }
+}
+@media screen and (max-width: 500px) {
+    .start-button {
+        font-size: 1.7rem;
+        border-radius: 1.1rem;
+    }
+    .choose-level {
+        font-size: 1.7rem;
+    }
+    .easy-button,
+    .medium-button,
+    .hard-button {
+        width: 8rem;
+        font-size: 1.5rem;
+        border-radius: 1.1rem;
+    }
+}
+@media screen and (max-width: 390px) {
+    .start-button {
+        font-size: 1.5rem;
+        border-radius: 1.1rem;
+    }
 }
