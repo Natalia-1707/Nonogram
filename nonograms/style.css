@@ -25,9 +25,10 @@ body {
     justify-content: center;
 }
 
-/* START GAME  */
+/* INITIAL SCREEN AND START GAME  */
 
-.start-screen {
+.start-screen,
+.play-field {
     width: 90%;
     height: auto;
     margin: auto;
@@ -35,7 +36,10 @@ body {
     flex-direction: column;
     justify-content: center;
     gap: 2rem;
-    /*background-color: rgb(192, 192, 192);*/
+    background-color: rgb(192, 192, 192);
+}
+.play-field {
+    display: none;
 }
 .title {
     width: auto;
@@ -57,6 +61,7 @@ body {
     font-family: "Jost", serif;
     font-size: 3rem;
     transition: transform 0.2s;
+    cursor: pointer;
 }
 .start-button:hover {
     background-color: rgb(0, 51, 25);
@@ -104,6 +109,7 @@ body {
     font-family: "Jost", serif;
     font-size: 2.5rem;
     transition: transform 0.2s;
+    cursor: pointer;
 }
 .easy-button:hover,
 .medium-button:hover,
@@ -112,6 +118,35 @@ body {
     color: white;
     transform: scale(1.05); 
 }
+
+/* PLAY FIELD */
+
+.play-area {
+    width: 80%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: aquamarine;
+}
+.row {
+    display: flex;
+}
+.cell-button {
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border: 1px solid rgb(0, 51, 25);
+    cursor: pointer;
+}
+.cell-button:hover{
+    background-color: rgb(0, 51, 25);
+}
+.cell-button-active {
+    background-color: rgb(0, 51, 25);
+}
+
 /* MEDIA */
 
 @media screen and (max-width: 1000px) {

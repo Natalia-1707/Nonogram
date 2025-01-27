@@ -17,7 +17,7 @@ fontAwesomeLink.rel = 'stylesheet';
 fontAwesomeLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css';
 document.head.appendChild(fontAwesomeLink);
 
-// START GAME //
+// INITIAL SCREEN //
 
 let startScreen = document.createElement('div');
 startScreen.classList.add('start-screen');
@@ -64,3 +64,57 @@ levelDiv.append(levelBtns);
 
 
 document.body.append(startScreen);
+
+
+
+// START GAME //
+
+let playField = document.createElement('div');
+playField.classList.add("play-field");
+
+document.body.append(playField);
+
+startBtn.addEventListener ('click', () => {
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+})
+
+let playArea = document.createElement('div');
+playArea.classList.add('play-area');
+playField.append(playArea);
+
+let matrix = 5;
+
+function selectLevel(levelSelected) {
+    if (levelSelected === 'easy') {
+        matrix = 5;
+    }
+    if (levelSelected === 'medium') {
+        matrix = 10;
+    }
+    if (levelSelected === 'hard') {
+        matrix = 15;
+    }
+    return matrix;
+}
+
+
+function createPlayField(matrixSize) {
+    playArea.innerHTML = '';
+    /*matrix = selectLevel();*/
+    for (let i = 0; i < matrixSize; i++) {
+        let row = document.createElement('div');
+        row.classList.add('row');
+        for (let j = 0; j < matrixSize; j++) {
+            let cell = document.createElement('button');
+            cell.classList.add("cell-button");
+            cell.addEventListener('click', () => {
+                cell.classList.toggle('cell-button-active'); 
+            });
+            row.appendChild(cell);
+        }
+        playArea.appendChild(row);
+    }
+}
+createPlayField(matrix);
+
