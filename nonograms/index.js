@@ -32,21 +32,6 @@ async function loadJSON() {
 }
 console.log(jsonTemplates);
 
-async function startGame(matrixSize) {
-    await loadJSON();
-
-    let template = getRandomTemplate(matrixSize);
-
-    createPlayField(matrixSize, template);
-}
-
-
-function getRandomTemplate(size) {
-    let templates = Object.keys(jsonTemplates[size + "x" + size]);
-    let randomName = templates[Math.floor(Math.random() * templates.length)];
-    return jsonTemplates[size + "x" + size][randomName];
-}
-
 
 // INITIAL SCREEN //
 
@@ -96,43 +81,213 @@ levelDiv.append(levelBtns);
 
 document.body.append(startScreen);
 
+// LEVEL CHOSE //
+
+// easy level //
+
+easyBtn.addEventListener('click', () => {
+    currentLevel = "easy";
+    easyList.classList.add('show');
+})
+
+let easyList = document.createElement('div');
+easyList.classList.add('easy-list');
+
+let easyListTitle = document.createElement('div');
+easyListTitle.classList.add('easy-list-title');
+easyListTitle.textContent = "Click the image you like";
+
+let easyBtns = document.createElement('div');
+easyBtns.classList.add('easy-buttons-div');
+
+let templateOneEasy = document.createElement('button');
+templateOneEasy.classList.add('one-easy-button');
+let oneImg = document.createElement('img');
+oneImg.src = './img/5.5one.jpeg';
+oneImg.alt = 'Digit one';
+let oneText = document.createElement('div');
+oneText.textContent = "Digit 1";
+oneText.classList.add('one-text');
+templateOneEasy.append(oneImg);
+templateOneEasy.append(oneText);
+
+templateOneEasy.addEventListener('click', () => {
+    easyList.classList.remove('show');
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    startGame(currentLevel, "one");
+});
+
+let templateTwoEasy = document.createElement('button');
+templateTwoEasy.classList.add('two-easy-button');
+let twoImg = document.createElement('img');
+twoImg.src = './img/5.5cancel.jpeg';
+twoImg.alt = 'Cancel';
+let twoText = document.createElement('div');
+twoText.textContent = "Cancel";
+twoText.classList.add('two-text');
+templateTwoEasy.append(twoImg);
+templateTwoEasy.append(twoText);
+
+templateTwoEasy.addEventListener('click', () => {
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    easyList.classList.remove('show');
+    startGame(currentLevel, "cancel");
+});
+
+let templateThreeEasy = document.createElement('button');
+templateThreeEasy.classList.add('three-easy-button');
+let threeImg = document.createElement('img');
+threeImg.src = './img/5.5dumbbell.jpeg';
+threeImg.alt = 'Dumbbell';
+let threeText = document.createElement('div');
+threeText.textContent = "Dumbbell";
+threeText.classList.add('three-text');
+templateThreeEasy.append(threeImg);
+templateThreeEasy.append(threeText);
+
+templateThreeEasy.addEventListener('click', () => {
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    easyList.classList.remove('show');
+    startGame(currentLevel, "dumbbell");
+});
+
+let templateFourEasy = document.createElement('button');
+templateFourEasy.classList.add('four-easy-button');
+let fourImg = document.createElement('img');
+fourImg.src = './img/5.5button.jpeg';
+fourImg.alt = 'Button';
+let fourText = document.createElement('div');
+fourText.textContent = "Button";
+fourText.classList.add('four-text');
+templateFourEasy.append(fourImg);
+templateFourEasy.append(fourText);
+
+templateFourEasy.addEventListener('click', () => {
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    easyList.classList.remove('show');
+    startGame(currentLevel, "button");
+});
+
+let templateFiveEasy = document.createElement('button');
+templateFiveEasy.classList.add('five-easy-button');
+let fiveImg = document.createElement('img');
+fiveImg.src = './img/5.5abstraction.jpeg';
+fiveImg.alt = 'Abstraction';
+let fiveText = document.createElement('div');
+fiveText.textContent = "Abstraction";
+fiveText.classList.add('five-text');
+templateFiveEasy.append(fiveImg);
+templateFiveEasy.append(fiveText);
+
+templateFiveEasy.addEventListener('click', () => {
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    easyList.classList.remove('show');
+    startGame(currentLevel, "abstraction");
+});
+
+let cancelBtn = document.createElement('button');
+cancelBtn.classList.add('cancel-button');
+let icon = document.createElement('i');
+icon.classList.add('fa-regular', 'fa-circle-xmark');
+cancelBtn.append(icon);
+
+cancelBtn.addEventListener ("click", () => {
+    easyList.classList.remove('show');
+})
+
+easyBtns.append(cancelBtn);
+easyBtns.append(templateOneEasy);
+easyBtns.append(templateTwoEasy);
+easyBtns.append(templateThreeEasy);
+easyBtns.append(templateFourEasy);
+easyBtns.append(templateFiveEasy);
+easyList.append(easyListTitle);
+easyList.append(easyBtns);
+startScreen.append(easyList);
 
 
-// START GAME //
+mediumBtn.addEventListener('click', () => {
+    currentLevel = "medium";
+})
+
+hardBtn.addEventListener('click', () => {
+    currentLevel = "hard";
+})
+
+// START GAME // 
+
+
+function selectLevel(levelSelected) {
+    let matrix;
+    if (levelSelected === 'easy') {
+        matrix = 5;
+    } else if (levelSelected === 'medium') {
+        matrix = 10;
+    } else if (levelSelected === 'hard') {
+        matrix = 15;
+    }
+    return matrix;
+}
+
+async function startGame(level, templateName) {
+    await loadJSON();
+    matrixSize = selectLevel(level);
+    console.log("Размер матрицы после selectLevel:", matrixSize);
+    let matrixKey = matrixSize + "x" + matrixSize;
+    if (jsonTemplates[matrixKey]) {
+        let template;
+        if (templateName) {
+            template = jsonTemplates[matrixKey][templateName];
+        } else {
+            template = getRandomTemplate(matrixSize);
+        }
+
+        if (template) {
+            createPlayField(matrixSize, template);
+        } else {
+            console.error("Шаблон не найден:", templateName);
+        }
+    }
+}
+
+
+function getRandomTemplate(size) {
+    let templates = Object.keys(jsonTemplates[size + "x" + size]);
+    let randomName = templates[Math.floor(Math.random() * templates.length)];
+    return jsonTemplates[size + "x" + size][randomName];
+}
+
+
+// PLAY AREA //
 
 let playField = document.createElement('div');
 playField.classList.add("play-field");
 
 document.body.append(playField);
 
+let currentLevel = 'easy';
+
 startBtn.addEventListener ('click', () => {
     startScreen.style.display = 'none';
     playField.style.display = 'flex';
+    if (!currentLevel) {
+        currentLevel = 'easy';
+    }
+    startGame(currentLevel);
 })
 
 let playArea = document.createElement('div');
 playArea.classList.add('play-area');
 playField.append(playArea);
 
-let matrix = 5;
-
-function selectLevel(levelSelected) {
-    if (levelSelected === 'easy') {
-        matrix = 5;
-    }
-    if (levelSelected === 'medium') {
-        matrix = 10;
-    }
-    if (levelSelected === 'hard') {
-        matrix = 15;
-    }
-    return matrix;
-}
-
-
 function createPlayField(matrixSize, template) {
+    console.log("createPlayField вызвана с matrixSize:", matrixSize, "и template:", template);
     playArea.innerHTML = '';
-    /*matrix = selectLevel();*/
 
     let rowHints = template.rowHints;
     let colHints = template.colHints;
@@ -190,13 +345,41 @@ function createPlayField(matrixSize, template) {
         for (let j = 0; j < matrixSize; j++) {
             let cell = document.createElement('button');
             cell.classList.add("cell-button");
+            cell.setAttribute('data-i', i);
+            cell.setAttribute('data-j', j);
             cell.addEventListener('click', () => {
                 cell.classList.toggle('cell-button-active');
                 currentState[i][j] = cell.classList.contains('cell-button-active') ? 1 : 0;
                 console.log("currentState", currentState);
                 console.log("grid", grid);
 
-                cellStatus(i, j, currentState, grid);
+                cellStatus(cell, i, j, currentState, grid);
+            });
+            let clicks = 0;
+            cell.addEventListener('contextmenu', (event) => {
+                event.preventDefault();
+                let icon = cell.querySelector('i');
+                if (clicks === 0) {
+                    clicks++;
+                    cell.classList.remove('cell-button-active');
+                    icon = document.createElement('i');
+                    icon.classList.add('fa-solid', 'fa-xmark');
+                    cell.appendChild(icon);
+                    if (grid[i][j] === 1) {
+                        cell.classList.add('cell-button-wrong');
+                        setTimeout(() => {
+                            cell.classList.remove('cell-button-wrong');
+                        }, 500);
+                    }
+                    if (grid[i][j] === 0) {
+                        cell.classList.add('cell-button-disabled-i');
+                        cell.classList.add('cell-button-disabled');
+                    }
+                } else if (clicks > 0 && icon) {
+                    icon.remove();
+                    clicks = 0;
+                }
+                cellStatus(cell, i, j, currentState, grid);
             });
             row.appendChild(cell);
         }
@@ -210,10 +393,16 @@ function createPlayField(matrixSize, template) {
     gameField.appendChild(rows);
     playArea.appendChild(gameField);
 }
-function cellStatus(i, j, currentState, grid) {
-    if (currentState[i][j] === grid[i][j]) {
-        console.log(`Ячейка [${i}, ${j}] верна!`);
+function cellStatus(cell, i, j, currentState, grid) {
+    if (currentState[i][j] === grid[i][j] && grid[i][j] === 1) {
+        cell.classList.add('cell-button-disabled');
+    } else if (currentState[i][j] === 0) {
+        cell.classList.remove('cell-button-disabled');
     } else {
+        cell.classList.add('cell-button-wrong');
+        setTimeout(() => {
+            cell.classList.remove('cell-button-wrong');
+        }, 500);
         console.log(`Ячейка [${i}, ${j}] неверна!`);
     }
 
@@ -224,6 +413,10 @@ function checkWin(currentState, grid) {
     let correct = true;
     for (let i = 0; i < grid.length; i++) {
         for (let j = 0; j < grid[i].length; j++) {
+            let cell = document.querySelector(`.cell-button[data-i="${i}"][data-j="${j}"]`);
+            if (cell && cell.querySelector('i')) {
+                continue;
+            }
             if (currentState[i][j] !== grid[i][j]) {
                 correct = false;
                 console.log("It's not a win yet");
@@ -231,13 +424,17 @@ function checkWin(currentState, grid) {
         }
     }
     if (correct) {
+        console.log("Победа!");
+        const allCells = document.querySelectorAll('.cell-button');
+        allCells.forEach(cell => {
+            cell.classList.add('cell-button-disabled');
+        });
         setTimeout(() => {
             alert("Поздравляем! Вы выиграли!");
         }, 100);
     }
 }
 
-startGame(5)
 
 // GAME PROCESS //
 
