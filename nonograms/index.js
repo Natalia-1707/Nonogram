@@ -17,6 +17,37 @@ fontAwesomeLink.rel = 'stylesheet';
 fontAwesomeLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css';
 document.head.appendChild(fontAwesomeLink);
 
+// JSON //
+
+let jsonTemplates = {};
+
+async function loadJSON() {
+    try {
+        let response = await fetch('templates.json');
+        jsonTemplates = await response.json();
+        console.log("JSON загружен:", jsonTemplates);
+    } catch (error) {
+        console.error("Ошибка загрузки JSON:", error);
+    }
+}
+console.log(jsonTemplates);
+
+async function startGame(matrixSize) {
+    await loadJSON();
+
+    let template = getRandomTemplate(matrixSize);
+
+    createPlayField(matrixSize, template);
+}
+
+
+function getRandomTemplate(size) {
+    let templates = Object.keys(jsonTemplates[size + "x" + size]);
+    let randomName = templates[Math.floor(Math.random() * templates.length)];
+    return jsonTemplates[size + "x" + size][randomName];
+}
+
+
 // INITIAL SCREEN //
 
 let startScreen = document.createElement('div');
@@ -99,9 +130,60 @@ function selectLevel(levelSelected) {
 }
 
 
-function createPlayField(matrixSize) {
+function createPlayField(matrixSize, template) {
     playArea.innerHTML = '';
     /*matrix = selectLevel();*/
+
+    let rowHints = template.rowHints;
+    let colHints = template.colHints;
+    let grid = template.grid;
+
+    let gameField = document.createElement('div');
+    gameField.classList.add('game-field');
+
+    let topHints = document.createElement('div');
+    topHints.classList.add('top-hints');
+
+    for (let i = 0; i < matrixSize; i++) {
+        let colHintContainer = document.createElement('div');
+        colHintContainer.classList.add('col-hint-container');
+        if (colHints[i].length > 0) {
+            colHints[i].forEach((hint) => {
+                let colHint = document.createElement('div');
+                colHint.classList.add('col-hint');
+                colHint.textContent = hint;
+                colHintContainer.appendChild(colHint);
+            });
+        }
+        topHints.appendChild(colHintContainer);
+    }
+
+    let leftHints = document.createElement('div');
+    leftHints.classList.add('left-hints');
+
+    for (let i = 0; i < matrixSize; i++) {
+        let rowHintContainer = document.createElement('div');
+        rowHintContainer.classList.add('row-hint-container');
+        if (rowHints[i].length > 0) {
+            rowHints[i].forEach((hint) => {
+                let rowHint = document.createElement('div');
+                rowHint.classList.add('row-hint');
+                rowHint.textContent = hint;
+                rowHintContainer.appendChild(rowHint);
+            });
+        }
+        leftHints.appendChild(rowHintContainer);
+    }
+
+    let currentState = [];
+    for (let i = 0; i < matrixSize; i++) {
+        currentState[i] = [];
+        for (let j = 0; j < matrixSize; j++) {
+            currentState[i][j] = 0;
+        }
+    }
+ 
+    let rows = document.createElement('div');
     for (let i = 0; i < matrixSize; i++) {
         let row = document.createElement('div');
         row.classList.add('row');
@@ -109,12 +191,54 @@ function createPlayField(matrixSize) {
             let cell = document.createElement('button');
             cell.classList.add("cell-button");
             cell.addEventListener('click', () => {
-                cell.classList.toggle('cell-button-active'); 
+                cell.classList.toggle('cell-button-active');
+                currentState[i][j] = cell.classList.contains('cell-button-active') ? 1 : 0;
+                console.log("currentState", currentState);
+                console.log("grid", grid);
+
+                cellStatus(i, j, currentState, grid);
             });
             row.appendChild(cell);
         }
-        playArea.appendChild(row);
+        rows.appendChild(row);
+    }
+
+    let emptyDiv = document.createElement('div');
+    gameField.appendChild(emptyDiv);
+    gameField.appendChild(topHints);
+    gameField.appendChild(leftHints);
+    gameField.appendChild(rows);
+    playArea.appendChild(gameField);
+}
+function cellStatus(i, j, currentState, grid) {
+    if (currentState[i][j] === grid[i][j]) {
+        console.log(`Ячейка [${i}, ${j}] верна!`);
+    } else {
+        console.log(`Ячейка [${i}, ${j}] неверна!`);
+    }
+
+    checkWin(currentState, grid);
+}
+
+function checkWin(currentState, grid) {
+    let correct = true;
+    for (let i = 0; i < grid.length; i++) {
+        for (let j = 0; j < grid[i].length; j++) {
+            if (currentState[i][j] !== grid[i][j]) {
+                correct = false;
+                console.log("It's not a win yet");
+            }
+        }
+    }
+    if (correct) {
+        setTimeout(() => {
+            alert("Поздравляем! Вы выиграли!");
+        }, 100);
     }
 }
-createPlayField(matrix);
+
+startGame(5)
+
+// GAME PROCESS //
+
 

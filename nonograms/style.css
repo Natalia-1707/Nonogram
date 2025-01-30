@@ -130,6 +130,42 @@ body {
     justify-content: center;
     background-color: aquamarine;
 }
+
+.game-field {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 10px;                       
+    align-items: center;
+}
+
+.top-hints {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin-left: 15px;
+    gap: 20px;
+    font-size: 25px;
+}
+
+.left-hints {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+    gap: 20px;
+    font-size: 25px;
+}
+
+.col-hint-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.row-hint-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
 .row {
     display: flex;
 }
