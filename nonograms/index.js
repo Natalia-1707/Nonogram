@@ -200,13 +200,13 @@ cancelBtn.addEventListener ("click", () => {
     easyList.classList.remove('show');
 })
 
-easyBtns.append(cancelBtn);
+easyList.append(easyListTitle);
+easyList.append(cancelBtn);
 easyBtns.append(templateOneEasy);
 easyBtns.append(templateTwoEasy);
 easyBtns.append(templateThreeEasy);
 easyBtns.append(templateFourEasy);
 easyBtns.append(templateFiveEasy);
-easyList.append(easyListTitle);
 easyList.append(easyBtns);
 startScreen.append(easyList);
 
