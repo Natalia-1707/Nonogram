@@ -341,9 +341,135 @@ mediumBtns.append(templateFiveMedium);
 mediumList.append(mediumBtns);
 startScreen.append(mediumList);
 
+// hard level //
+
+let hardList = document.createElement('div');
+hardList.classList.add('hard-list');
+
 hardBtn.addEventListener('click', () => {
     currentLevel = "hard";
+    hardList.style.display = 'flex';
+    hardList.classList.add('show');
 })
+
+let hardListTitle = document.createElement('div');
+hardListTitle.classList.add('hard-list-title');
+hardListTitle.textContent = "Click the image you like";
+
+let hardBtns = document.createElement('div');
+hardBtns.classList.add('hard-buttons-div');
+
+let templateOneHard = document.createElement('button');
+templateOneHard.classList.add('one-hard-button');
+let oneImgHard = document.createElement('img');
+oneImgHard.src = './img/15.15arrow.jpeg';
+oneImgHard.alt = 'Arrow';
+let oneTextHard = document.createElement('div');
+oneTextHard.textContent = "Arrow";
+oneTextHard.classList.add('one-text-hard');
+templateOneHard.append(oneImgHard);
+templateOneHard.append(oneTextHard);
+
+templateOneHard.addEventListener('click', () => {
+    hardList.classList.remove('show');
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    startGame(currentLevel, "arrow");
+});
+
+let templateTwoHard = document.createElement('button');
+templateTwoHard.classList.add('two-hard-button');
+let twoImgHard = document.createElement('img');
+twoImgHard.src = './img/15.15wrench.jpeg';
+twoImgHard.alt = 'Wrench';
+let twoTextHard = document.createElement('div');
+twoTextHard.textContent = "Wrench";
+twoTextHard.classList.add('two-text-hard');
+templateTwoHard.append(twoImgHard);
+templateTwoHard.append(twoTextHard);
+
+templateTwoHard.addEventListener('click', () => {
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    hardList.classList.remove('show');
+    startGame(currentLevel, "wrench");
+});
+
+let templateThreeHard = document.createElement('button');
+templateThreeHard.classList.add('three-hard-button');
+let threeImgHard = document.createElement('img');
+threeImgHard.src = './img/15.15crab.jpeg';
+threeImgHard.alt = 'Crab';
+let threeTextHard = document.createElement('div');
+threeTextHard.textContent = "Crab";
+threeTextHard.classList.add('three-text-hard');
+templateThreeHard.append(threeImgHard);
+templateThreeHard.append(threeTextHard);
+
+templateThreeHard.addEventListener('click', () => {
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    hardList.classList.remove('show');
+    startGame(currentLevel, "crab");
+});
+
+
+let templateFourHard = document.createElement('button');
+templateFourHard.classList.add('four-hard-button');
+let fourImgHard = document.createElement('img');
+fourImgHard.src = './img/15.15car.jpeg';
+fourImgHard.alt = 'Car';
+let fourTextHard = document.createElement('div');
+fourTextHard.textContent = "Car";
+fourTextHard.classList.add('four-text-hard');
+templateFourHard.append(fourImgHard);
+templateFourHard.append(fourTextHard);
+
+templateFourHard.addEventListener('click', () => {
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    hardList.classList.remove('show');
+    startGame(currentLevel, "car");
+});
+
+let templateFiveHard = document.createElement('button');
+templateFiveHard.classList.add('five-hard-button');
+let fiveImgHard = document.createElement('img');
+fiveImgHard.src = './img/15.15coffee.jpeg';
+fiveImgHard.alt = 'Coffee';
+let fiveTextHard = document.createElement('div');
+fiveTextHard.textContent = "Coffee";
+fiveTextHard.classList.add('five-text-hard');
+templateFiveHard.append(fiveImgHard);
+templateFiveHard.append(fiveTextHard);
+
+templateFiveHard.addEventListener('click', () => {
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    hardList.classList.remove('show');
+    startGame(currentLevel, "coffee");
+});
+
+let cancelBtnHard = document.createElement('button');
+cancelBtnHard.classList.add('cancel-button3');
+let icon3 = document.createElement('i');
+icon3.classList.add('fa-regular', 'fa-circle-xmark');
+cancelBtnHard.append(icon3);
+
+cancelBtnHard.addEventListener ("click", () => {
+   hardList.classList.remove('show');
+})
+
+hardList.append(hardListTitle);
+hardList.append(cancelBtnHard);
+hardBtns.append(templateOneHard);
+hardBtns.append(templateTwoHard);
+hardBtns.append(templateThreeHard);
+hardBtns.append(templateFourHard);
+hardBtns.append(templateFiveHard);
+hardList.append(hardBtns);
+
+startScreen.append(hardList);
 
 // START GAME // 
 
@@ -546,7 +672,12 @@ function checkWin(currentState, grid) {
     for (let i = 0; i < grid.length; i++) {
         for (let j = 0; j < grid[i].length; j++) {
             let cell = document.querySelector(`.cell-button[data-i="${i}"][data-j="${j}"]`);
-            if (cell && cell.querySelector('i')) {
+            let icon = cell ? cell.querySelector('i') : null;
+            if (icon && icon.classList.contains('fa-xmark')) {
+                if (grid[i][j] === 1) {
+                    correct = false;
+                    console.log(`Ячейка [${i}, ${j}] имеет крестик, но должна быть заполнена!`);
+                }
                 continue;
             }
             if (currentState[i][j] !== grid[i][j]) {
@@ -567,7 +698,10 @@ function checkWin(currentState, grid) {
     }
 }
 
+// EXTRA OPTIONS //
 
-// GAME PROCESS //
+let resetBtn = document.createElement('button');
+resetBtn.textContent = 'Reset game';
+resetBtn.classlist.add('reset-button');
 
-
+playField.append(resetBtn);

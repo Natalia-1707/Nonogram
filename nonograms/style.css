@@ -100,7 +100,8 @@ body {
 }
 .easy-button,
 .medium-button,
-.hard-button {
+.hard-button,
+.reset-button {
     width: 15rem;
     height: auto;
     padding: 0.1rem;
@@ -123,7 +124,8 @@ body {
 /* LEVEL CHOSE */
 
 .easy-list,
-.medium-list {
+.medium-list,
+.hard-list {
     position: absolute;
     width: 70%;
     max-height: 90vh;
@@ -144,14 +146,16 @@ body {
 }
 
 .easy-list.show,
-.medium-list.show{
+.medium-list.show,
+.hard-list.show {
     visibility: visible;
     transform: translateX(-50%) scale(1);
     box-shadow: rgba(55, 55, 56, 0.5) 0 0 0 500rem;
 }
 
 .easy-list-title,
-.medium-list-title {
+.medium-list-title,
+.hard-list-title {
     width: auto;
     height: auto;
     display: flex;
@@ -163,7 +167,8 @@ body {
 }
 
 .easy-buttons-div,
-.medium-buttons-div {
+.medium-buttons-div,
+.hard-buttons-div {
     width: auto;
     height: auto;
     display: flex;
@@ -183,7 +188,12 @@ body {
 .two-medium-button,
 .three-medium-button,
 .four-medium-button,
-.five-medium-button {
+.five-medium-button,
+.one-hard-button,
+.two-hard-button,
+.three-hard-button,
+.four-hard-button,
+.five-hard-button {
     width: 15.75rem;
     height: 15.75rem;
     display: flex;
@@ -205,12 +215,18 @@ body {
 .two-medium-button:hover,
 .three-medium-button:hover,
 .four-medium-button:hover,
-.five-medium-button:hover {
+.five-medium-button:hover,
+.one-hard-button:hover,
+.two-hard-button:hover,
+.three-hard-button:hover,
+.four-hard-button:hover,
+.five-hard-button:hover {
     transform: scale(1.05);
 }
 
 .easy-list img,
-.medium-list img {
+.medium-list img,
+.hard-list img {
     width: 10.5rem;
     height: 10.5rem;
 }
@@ -224,14 +240,20 @@ body {
 .two-text-medium,
 .three-text-medium,
 .four-text-medium,
-.five-text-medium {
+.five-text-medium,
+.one-text-hard,
+.two-text-hard,
+.three-text-hard,
+.four-text-hard,
+.five-text-hard {
     font-family: "Reggae One", serif;
     font-size: 2rem;
     color: rgb(0, 51, 25);
 }
 
 .cancel-button,
-.cancel-button2 {
+.cancel-button2,
+.cancel-button3 {
     position: absolute;
     right: 1.7rem;
     top: 5%;
@@ -243,13 +265,16 @@ body {
     background-color: transparent;
 }
 .cancel-button i,
-.cancel-button2 i {
+.cancel-button2 i,
+.cancel-button3 i {
     color: rgb(64, 64, 64);
     transition: color 0.3s;
     font-size: 1.5rem;
 }
 
-.cancel-button:hover i {
+.cancel-button:hover i,
+.cancel-button2:hover i,
+.cancel-button3:hover i  {
     font-size: 2rem;
     color: rgb(0, 51, 25);
 }
@@ -280,7 +305,7 @@ body {
     grid-auto-columns: 1fr;
     border-bottom: 2px solid black;
     margin-left: 0;
-    gap: 20px;
+    gap: 0;
     font-size: 25px;
     text-align: center;
     align-items: center;
@@ -291,10 +316,19 @@ body {
     grid-auto-flow: row;
     grid-auto-rows: 1fr;
     border-right: 2px solid black;
-    gap: 20px;
-    font-size: 27px;
+    gap: 10px;
+    font-size: 25px;
     align-items: center;
     text-align: right;
+}
+
+.left-hints > .row-hint-container:nth-child(5n) {
+    border-bottom: 2px solid black;
+}
+
+
+.top-hints > .col-hint-container:nth-child(5n) {
+    border-right: 2px solid black;
 }
 
 .col-hint-container {
@@ -307,6 +341,7 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    gap: 0.5rem;
     padding-right: 10px;
 }
 
@@ -314,8 +349,8 @@ body {
     display: flex;
 }
 .cell-button {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     background-color: white;
     border: 1px solid rgb(0, 51, 25);
     cursor: pointer;
@@ -325,9 +360,10 @@ body {
     border-right: 2px solid black;
 }
 
-.game-field > .row:nth-child(5n) .cell-button {
+.row:nth-child(5n) {
     border-bottom: 2px solid black;
 }
+
 .cell-button:hover{
     border: 3px solid rgb(0, 51, 25);
 }
