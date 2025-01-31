@@ -122,7 +122,8 @@ body {
 
 /* LEVEL CHOSE */
 
-.easy-list {
+.easy-list,
+.medium-list {
     position: absolute;
     width: 70%;
     max-height: 90vh;
@@ -137,16 +138,20 @@ body {
     border: 0.125rem solid rgb(0, 51, 25);
     border-radius: 1rem;
     background-color: white;
+    visibility: hidden;
     transition: transform 0.5s ease;
     overflow-y: auto;
 }
 
-.easy-list.show {
+.easy-list.show,
+.medium-list.show{
+    visibility: visible;
     transform: translateX(-50%) scale(1);
     box-shadow: rgba(55, 55, 56, 0.5) 0 0 0 500rem;
 }
 
-.easy-list-title {
+.easy-list-title,
+.medium-list-title {
     width: auto;
     height: auto;
     display: flex;
@@ -157,7 +162,8 @@ body {
     font-size: 3rem;
 }
 
-.easy-buttons-div {
+.easy-buttons-div,
+.medium-buttons-div {
     width: auto;
     height: auto;
     display: flex;
@@ -172,7 +178,12 @@ body {
 .two-easy-button,
 .three-easy-button,
 .four-easy-button,
-.five-easy-button {
+.five-easy-button,
+.one-medium-button,
+.two-medium-button,
+.three-medium-button,
+.four-medium-button,
+.five-medium-button {
     width: 15.75rem;
     height: 15.75rem;
     display: flex;
@@ -189,11 +200,17 @@ body {
 .two-easy-button:hover,
 .three-easy-button:hover,
 .four-easy-button:hover,
-.five-easy-button:hover {
+.five-easy-button:hover,
+.one-medium-button:hover,
+.two-medium-button:hover,
+.three-medium-button:hover,
+.four-medium-button:hover,
+.five-medium-button:hover {
     transform: scale(1.05);
 }
 
-.easy-list img {
+.easy-list img,
+.medium-list img {
     width: 10.5rem;
     height: 10.5rem;
 }
@@ -202,13 +219,19 @@ body {
 .two-text,
 .three-text,
 .four-text,
-.five-text {
+.five-text,
+.one-text-medium,
+.two-text-medium,
+.three-text-medium,
+.four-text-medium,
+.five-text-medium {
     font-family: "Reggae One", serif;
     font-size: 2rem;
     color: rgb(0, 51, 25);
 }
 
-.cancel-button {
+.cancel-button,
+.cancel-button2 {
     position: absolute;
     right: 1.7rem;
     top: 5%;
@@ -219,7 +242,8 @@ body {
     border: none;
     background-color: transparent;
 }
-.cancel-button i {
+.cancel-button i,
+.cancel-button2 i {
     color: rgb(64, 64, 64);
     transition: color 0.3s;
     font-size: 1.5rem;
@@ -252,19 +276,25 @@ body {
 
 .top-hints {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
     border-bottom: 2px solid black;
-    margin-left: 15px;
+    margin-left: 0;
     gap: 20px;
     font-size: 25px;
+    text-align: center;
+    align-items: center;
 }
 
 .left-hints {
     display: grid;
-    grid-template-rows: repeat(5, 1fr);
+    grid-auto-flow: row;
+    grid-auto-rows: 1fr;
     border-right: 2px solid black;
     gap: 20px;
-    font-size: 25px;
+    font-size: 27px;
+    align-items: center;
+    text-align: right;
 }
 
 .col-hint-container {

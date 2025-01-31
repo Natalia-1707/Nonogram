@@ -85,13 +85,15 @@ document.body.append(startScreen);
 
 // easy level //
 
+let easyList = document.createElement('div');
+easyList.classList.add('easy-list');
+
 easyBtn.addEventListener('click', () => {
     currentLevel = "easy";
+    easyList.style.display = 'flex';
     easyList.classList.add('show');
 })
 
-let easyList = document.createElement('div');
-easyList.classList.add('easy-list');
 
 let easyListTitle = document.createElement('div');
 easyListTitle.classList.add('easy-list-title');
@@ -211,9 +213,133 @@ easyList.append(easyBtns);
 startScreen.append(easyList);
 
 
+// medium level //
+
+let mediumList = document.createElement('div');
+mediumList.classList.add('medium-list');
+
 mediumBtn.addEventListener('click', () => {
     currentLevel = "medium";
+    mediumList.style.display = 'flex';
+    mediumList.classList.add('show');
 })
+
+let mediumListTitle = document.createElement('div');
+mediumListTitle.classList.add('medium-list-title');
+mediumListTitle.textContent = "Click the image you like";
+
+let mediumBtns = document.createElement('div');
+mediumBtns.classList.add('medium-buttons-div');
+
+let templateOneMedium = document.createElement('button');
+templateOneMedium.classList.add('one-medium-button');
+let oneImgMedium = document.createElement('img');
+oneImgMedium.src = './img/10.10questionmark.jpeg';
+oneImgMedium.alt = 'Question mark';
+let oneTextMedium = document.createElement('div');
+oneTextMedium.textContent = "Question mark";
+oneTextMedium.classList.add('one-text-medium');
+templateOneMedium.append(oneImgMedium);
+templateOneMedium.append(oneTextMedium);
+
+templateOneMedium.addEventListener('click', () => {
+    mediumList.classList.remove('show');
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    startGame(currentLevel, "question mark");
+});
+
+let templateTwoMedium = document.createElement('button');
+templateTwoMedium.classList.add('two-medium-button');
+let twoImgMedium = document.createElement('img');
+twoImgMedium.src = './img/10.10camel.jpeg';
+twoImgMedium.alt = 'Camel';
+let twoTextMedium = document.createElement('div');
+twoTextMedium.textContent = "Camel";
+twoTextMedium.classList.add('two-text-medium');
+templateTwoMedium.append(twoImgMedium);
+templateTwoMedium.append(twoTextMedium);
+
+templateTwoMedium.addEventListener('click', () => {
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    mediumList.classList.remove('show');
+    startGame(currentLevel, "camel");
+});
+
+let templateThreeMedium = document.createElement('button');
+templateThreeMedium.classList.add('three-medium-button');
+let threeImgMedium = document.createElement('img');
+threeImgMedium.src = './img/10.10pattern.jpeg';
+threeImgMedium.alt = 'Pattern';
+let threeTextMedium = document.createElement('div');
+threeTextMedium.textContent = "Pattern";
+threeTextMedium.classList.add('three-text-medium');
+templateThreeMedium.append(threeImgMedium);
+templateThreeMedium.append(threeTextMedium);
+
+templateThreeMedium.addEventListener('click', () => {
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    mediumList.classList.remove('show');
+    startGame(currentLevel, "pattern");
+});
+
+let templateFourMedium = document.createElement('button');
+templateFourMedium.classList.add('four-medium-button');
+let fourImgMedium = document.createElement('img');
+fourImgMedium.src = './img/10.10emblem.jpeg';
+fourImgMedium.alt = 'Emblem';
+let fourTextMedium = document.createElement('div');
+fourTextMedium.textContent = "Pattern";
+fourTextMedium.classList.add('three-text-medium');
+templateFourMedium.append(fourImgMedium);
+templateFourMedium.append(fourTextMedium);
+
+templateFourMedium.addEventListener('click', () => {
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    mediumList.classList.remove('show');
+    startGame(currentLevel, "emblem");
+});
+
+let templateFiveMedium = document.createElement('button');
+templateFiveMedium.classList.add('five-medium-button');
+let fiveImgMedium = document.createElement('img');
+fiveImgMedium.src = './img/10.10alien.jpeg';
+fiveImgMedium.alt = 'Alien';
+let fiveTextMedium = document.createElement('div');
+fiveTextMedium.textContent = "Alien";
+fiveTextMedium.classList.add('three-text-medium');
+templateFiveMedium.append(fiveImgMedium);
+templateFiveMedium.append(fiveTextMedium);
+
+templateFiveMedium.addEventListener('click', () => {
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    mediumList.classList.remove('show');
+    startGame(currentLevel, "alien");
+});
+
+let cancelBtnMedium = document.createElement('button');
+cancelBtnMedium.classList.add('cancel-button2');
+let icon2 = document.createElement('i');
+icon2.classList.add('fa-regular', 'fa-circle-xmark');
+cancelBtnMedium.append(icon2);
+
+cancelBtnMedium.addEventListener ("click", () => {
+    mediumList.classList.remove('show');
+})
+
+mediumList.append(mediumListTitle);
+mediumList.append(cancelBtnMedium);
+mediumBtns.append(templateOneMedium);
+mediumBtns.append(templateTwoMedium);
+mediumBtns.append(templateThreeMedium);
+mediumBtns.append(templateFourMedium);
+mediumBtns.append(templateFiveMedium);
+mediumList.append(mediumBtns);
+startScreen.append(mediumList);
 
 hardBtn.addEventListener('click', () => {
     currentLevel = "hard";
@@ -299,6 +425,9 @@ function createPlayField(matrixSize, template) {
     let topHints = document.createElement('div');
     topHints.classList.add('top-hints');
 
+    topHints.style.display = 'grid';
+    topHints.style.gridTemplateColumns = `repeat(${matrixSize}, 1fr)`; 
+
     for (let i = 0; i < matrixSize; i++) {
         let colHintContainer = document.createElement('div');
         colHintContainer.classList.add('col-hint-container');
@@ -315,6 +444,9 @@ function createPlayField(matrixSize, template) {
 
     let leftHints = document.createElement('div');
     leftHints.classList.add('left-hints');
+
+    leftHints.style.display = 'grid';
+    leftHints.style.gridTemplateRows = `repeat(${matrixSize}, 1fr)`;
 
     for (let i = 0; i < matrixSize; i++) {
         let rowHintContainer = document.createElement('div');
