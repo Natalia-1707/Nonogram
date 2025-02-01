@@ -25,7 +25,7 @@ body {
     justify-content: center;
 }
 
-/* INITIAL SCREEN AND START GAME  */
+/* INITIAL SCREEN  */
 
 .start-screen,
 .second-screen,
@@ -59,8 +59,32 @@ body {
     font-size: clamp(2rem, 10vw, 10rem);
     color: rgb(0, 51, 25);
 }
-.start-button {
-    width: 40%;
+.input-field {
+    width: 30%;
+    height: auto;
+    margin: auto;
+    padding: 0.5rem;
+    border: 0.2rem solid rgb(0, 51, 25);
+    border-radius: 1.5rem;
+    text-align: center;
+    font-family: "Jost", serif;
+    font-size: 3rem;
+    transition: transform 0.2s;
+}
+.input-field[type="text"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+.input-field[type="text"] {
+    -moz-appearance: textfield;
+    appearance: none;
+}
+.input-field[type="text"]::-ms-clear {
+    display: none;
+}
+.start-button,
+.results-button {
+    width: 20%;
     height: auto;
     margin: auto;
     padding: 0.5rem;
@@ -72,11 +96,29 @@ body {
     transition: transform 0.2s;
     cursor: pointer;
 }
-.start-button:hover {
+.start-button:hover,
+.results-button:hover {
     background-color: rgb(0, 51, 25);
     color: white;
     transform: scale(1.05); 
 }
+
+.table {
+    width: 90%;
+    height: auto;
+    border-top: 0.4375rem solid rgb(0, 51, 25);
+    border-collapse: collapse;
+    table-layout: fixed;
+    text-align: center;
+    margin-bottom: 0.9375rem;
+    border: 0.0625rem solid rgb(0, 51, 25);
+    color: rgb(128, 128, 128);
+    font-family: "Jost", serif;
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+/* START GAME */
 .level-div {
     width: 100%;
     height: auto;
@@ -140,7 +182,8 @@ body {
 
 .easy-list,
 .medium-list,
-.hard-list {
+.hard-list,
+.results-window {
     position: absolute;
     width: 70%;
     max-height: 90vh;
@@ -163,7 +206,8 @@ body {
 
 .easy-list.show,
 .medium-list.show,
-.hard-list.show {
+.hard-list.show,
+.results-window.show {
     visibility: visible;
     transform: translateX(-50%) scale(1);
     box-shadow: rgba(55, 55, 56, 0.5) 0 0 0 500rem;
@@ -171,19 +215,22 @@ body {
 
 body.easy-list-open,
 body.medium-list-open,
-body.hard-list-open {
+body.hard-list-open,
+body.results-window-open {
     pointer-events: none;
 }
 
 body.easy-list-open .easy-list,
 body.medium-list-open .medium-list,
-body.hard-list-open .hard-list {
+body.hard-list-open .hard-list,
+body.results-window-open .results-window {
     pointer-events: auto;
 }
 
 .easy-list-title,
 .medium-list-title,
-.hard-list-title {
+.hard-list-title,
+.results-title {
     width: auto;
     height: auto;
     display: flex;
@@ -281,10 +328,10 @@ body.hard-list-open .hard-list {
 
 .cancel-button,
 .cancel-button2,
-.cancel-button3 {
+.cancel-button3,
+.cancel-button-results {
     position: absolute;
     right: 1.7rem;
-    top: 5%;
     transform: translateY(-50%);
     font-size: 1.2rem;
     cursor: pointer;
@@ -292,9 +339,18 @@ body.hard-list-open .hard-list {
     border: none;
     background-color: transparent;
 }
+.cancel-button,
+.cancel-button2,
+.cancel-button3 {
+    top: 5%;
+}
+.cancel-button-results {
+    top: 20%;
+}
 .cancel-button i,
 .cancel-button2 i,
-.cancel-button3 i {
+.cancel-button3 i,
+.cancel-button-results i {
     color: rgb(64, 64, 64);
     transition: color 0.3s;
     font-size: 1.5rem;
@@ -302,7 +358,8 @@ body.hard-list-open .hard-list {
 
 .cancel-button:hover i,
 .cancel-button2:hover i,
-.cancel-button3:hover i  {
+.cancel-button3:hover i,
+.cancel-button-results:hover i  {
     font-size: 2rem;
     color: rgb(0, 51, 25);
 }

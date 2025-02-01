@@ -42,13 +42,68 @@ let title = document.createElement('div');
 title.classList.add('title');
 title.textContent = 'NONOGRAM';
 
+let inputField = document.createElement('input');
+inputField.classList.add('input-field')
+inputField.type = "text";
+inputField.placeholder = "Put your name";
+
+
+let playerName = "";
+let playerCount = parseInt(localStorage.getItem("playerCount")) || 1;
+
+let resultsBtn = document.createElement('button');
+resultsBtn.classList.add("results-button");
+resultsBtn.textContent = 'Results';
 
 let startBtn = document.createElement('button');
 startBtn.classList.add("start-button");
 startBtn.textContent = 'Start game';
 
+let resultsWindow = document.createElement('div');
+resultsWindow.classList.add('results-window');
+let resultsWindowTitle = document.createElement('div');
+resultsWindowTitle.classList.add('results-title')
+resultsWindowTitle.textContent = 'Here are the results';
+resultsWindow.append(resultsWindowTitle);
+
+let cancelBtnResults = document.createElement('button');
+cancelBtnResults.classList.add('cancel-button-results');
+let icon4 = document.createElement('i');
+icon4.classList.add('fa-regular', 'fa-circle-xmark');
+cancelBtnResults.append(icon4);
+
+cancelBtnResults.addEventListener ("click", () => {
+    resultsWindow.classList.remove('show');
+    document.body.classList.remove('results-window-open');
+})
+resultsWindow.append(cancelBtnResults);
+
+let tableResults = document.createElement('table');
+tableResults.classList.add('table');
+resultsWindow.append(tableResults);
+
+let thead = document.createElement('thead');
+let tr =  document.createElement('tr');
+let th1 = document.createElement('th');
+th1.textContent = 'Player name';
+let th2 = document.createElement('th');
+th2.textContent = 'Puzzle';
+let th3 = document.createElement('th');
+th3.textContent = 'Difficulty';
+let th4 = document.createElement('th');
+th4.textContent = 'Time';
+tr.append(th1);
+tr.append(th2);
+tr.append(th3);
+tr.append(th4);
+thead.append(tr);
+tableResults.append(thead);
+
 startScreen.append(title);
+startScreen.append(inputField);
 startScreen.append(startBtn);
+startScreen.append(resultsBtn);
+startScreen.append(resultsWindow);
 
 document.body.append(startScreen);
 
@@ -75,37 +130,40 @@ async function startGame(level, templateName) {
 
     matrixSize = selectLevel(level); 
     console.log("Размер матрицы после selectLevel:", matrixSize);
-    
 
     let matrixKey = matrixSize + "x" + matrixSize;
     console.log("Ключ для поиска шаблона:", matrixKey);
     
+    let finalTemplateName = templateName;
+
     if (jsonTemplates[matrixKey]) {
         let template;
         
         if (templateName) {
-            // Если задано имя шаблона, используем его
             template = jsonTemplates[matrixKey][templateName];
+            console.log('Template:', templateName);
         } else {
-            // Иначе, получаем случайный шаблон
-            template = getRandomTemplate(matrixSize);
+            template = getRandomTemplate(matrixSize, matrixKey);
+            finalTemplateName = template.name;
         }
 
         if (template) {
-            createPlayField(matrixSize, template); // Создаем игровое поле
+            createPlayField(matrixSize, template, finalTemplateName);
         } else {
-            console.error("Шаблон не найден:", templateName);
+            console.error("Шаблон не найден:", finalTemplateName);
         }
     } else {
         console.error("Шаблоны для указанного размера не найдены:", matrixKey);
     }
 }
 
-
-function getRandomTemplate(size) {
-    let templates = Object.keys(jsonTemplates[size + "x" + size]);
+function getRandomTemplate(size, matrixKey) {
+    let templates = Object.keys(jsonTemplates[matrixKey]);
     let randomName = templates[Math.floor(Math.random() * templates.length)];
-    return jsonTemplates[size + "x" + size][randomName];
+    console.log("Random template name:", randomName);
+    let template = jsonTemplates[matrixKey][randomName];
+    template.name = randomName;
+    return template;
 }
 
 // PLAY AREA //
@@ -171,6 +229,12 @@ startBtn.addEventListener ('click', () => {
     if (!currentLevel) {
         currentLevel = 'easy';
     }
+    playerName = inputField.value.trim();
+    if (!playerName) {
+        playerName = `Player ${playerCount++}`;
+        localStorage.setItem("playerCount", playerCount);
+    }
+    console.log(playerName);
     startGame(currentLevel);
 })
 
@@ -182,7 +246,7 @@ let grid = [];
 let matrixSize = 0;
 
 let currentState = [];
-function createPlayField(matrixSize, template) {
+function createPlayField(matrixSize, template, templateName) {
     playArea.innerHTML = '';
 
     let rowHints = template.rowHints;
@@ -255,7 +319,7 @@ function createPlayField(matrixSize, template) {
                 console.log("currentState", currentState);
                 console.log("grid", grid);
 
-                cellStatus(cell, i, j, currentState, grid);
+                cellStatus(cell, i, j, currentState, grid, templateName);
             });
             cell.addEventListener('contextmenu', (event) => {
                 startTimer();
@@ -285,7 +349,7 @@ function createPlayField(matrixSize, template) {
                     cell.setAttribute('data-clicks', '0');
                     clicks = 0;
                 }
-                cellStatus(cell, i, j, currentState, grid);
+                cellStatus(cell, i, j, currentState, grid, templateName);
             });
             row.appendChild(cell);
         }
@@ -300,7 +364,7 @@ function createPlayField(matrixSize, template) {
     playArea.appendChild(gameField);
 }
 
-function cellStatus(cell, i, j, currentState, grid) {
+function cellStatus(cell, i, j, currentState, grid, templateName) {
     if (currentState[i][j] === grid[i][j] && grid[i][j] === 1) {
         cell.classList.add('cell-button-disabled');
     } else if (currentState[i][j] === 0) {
@@ -313,10 +377,10 @@ function cellStatus(cell, i, j, currentState, grid) {
         console.log(`Ячейка [${i}, ${j}] неверна!`);
     }
 
-    checkWin(currentState, grid);
+    checkWin(currentState, grid, templateName);
 }
 
-function checkWin(currentState, grid) {
+function checkWin(currentState, grid, templateName) {
     let correct = true;
     for (let i = 0; i < grid.length; i++) {
         for (let j = 0; j < grid[i].length; j++) {
@@ -343,6 +407,7 @@ function checkWin(currentState, grid) {
             cell.classList.add('cell-button-disabled');
         });
         stopTimer();
+        saveResult(playerName, templateName, currentLevel, totalSeconds);
         setTimeout(() => {
             alert("Поздравляем! Вы выиграли!");
         }, 100);
@@ -854,3 +919,51 @@ randomGameBtn.addEventListener("click", () => {
 
     startGame(currentLevel);
 });
+
+// INPUT //
+
+inputField.addEventListener("keyup", event => {
+    if(event.code === 'Enter') {
+        playerName = inputField.value.trim();
+        if (!playerName) {
+            playerName = `Player ${playerCount++}`;
+            localStorage.setItem("playerCount", playerCount);
+        }
+        startScreen.style.display = 'none'
+        secondScreen.style.display = 'flex';
+        startGame(currentLevel);
+    }
+    console.log(playerName);
+})
+
+window.addEventListener('load', () => {
+    inputField.focus();
+});
+
+// RESULTS //
+
+resultsBtn.addEventListener('click', () => {
+    resultsWindow.style.display = 'flex';
+    resultsWindow.classList.add('show');
+    document.body.classList.add('results-window-open');
+})
+
+let resultsSave = JSON.parse(localStorage.getItem('resultsSave')) || [];
+
+function saveResult(playerName, templateName, difficulty, time) {
+    const result = {
+        playerName: playerName,
+        template: templateName,
+        levelSelected: difficulty,
+        time: time
+    };
+
+    console.log(result); 
+
+    const resultsSave = JSON.parse(localStorage.getItem('resultsSave')) || [];
+    resultsSave.push(result);
+    localStorage.setItem('resultsSave', JSON.stringify(resultsSave));
+    console.log("Результаты после добавления:", resultsSave);
+
+    /*updateResults();*/
+}
