@@ -28,8 +28,8 @@ body {
 /* INITIAL SCREEN AND START GAME  */
 
 .start-screen,
+.second-screen,
 .play-field {
-    width: 90%;
     height: auto;
     margin: auto;
     display: flex;
@@ -37,12 +37,18 @@ body {
     background-color: rgb(192, 192, 192);
     z-index: 10;
 }
-.start-screen {
+.start-screen,
+.second-screen {
+    width: 90%;
     flex-direction: column;
     gap: 2rem;
 }
-.play-field {
+.second-screen {
     display: none;
+}
+
+.play-field {
+    width: 100%;
 }
 .title {
     width: auto;
@@ -152,6 +158,7 @@ body {
     visibility: hidden;
     transition: transform 0.5s ease;
     overflow-y: auto;
+    z-index: 10;
 }
 
 .easy-list.show,
@@ -160,6 +167,18 @@ body {
     visibility: visible;
     transform: translateX(-50%) scale(1);
     box-shadow: rgba(55, 55, 56, 0.5) 0 0 0 500rem;
+}
+
+body.easy-list-open,
+body.medium-list-open,
+body.hard-list-open {
+    pointer-events: none;
+}
+
+body.easy-list-open .easy-list,
+body.medium-list-open .medium-list,
+body.hard-list-open .hard-list {
+    pointer-events: auto;
 }
 
 .easy-list-title,
@@ -296,6 +315,14 @@ body {
     flex-direction: column;
     gap: 2rem;
 }
+.timer {
+    width: auto;
+    height: auto;
+    font-family: "Reggae One", serif;
+    font-size: 3rem;
+    display: flex;
+    justify-content: center;
+}
 
 .play-area {
     width: 80%;
@@ -405,6 +432,7 @@ body {
     cursor: not-allowed;
     pointer-events: none;
 }
+
 
 /* MEDIA */
 

@@ -41,11 +41,13 @@ startScreen.classList.add('start-screen');
 let title = document.createElement('div');
 title.classList.add('title');
 title.textContent = 'NONOGRAM';
-startScreen.append(title);
+
 
 let startBtn = document.createElement('button');
 startBtn.classList.add("start-button");
 startBtn.textContent = 'Start game';
+
+startScreen.append(title);
 startScreen.append(startBtn);
 
 document.body.append(startScreen);
@@ -106,19 +108,66 @@ function getRandomTemplate(size) {
     return jsonTemplates[size + "x" + size][randomName];
 }
 
-
 // PLAY AREA //
+
+let secondScreen = document.createElement('div');
+secondScreen.classList.add('second-screen');
 
 let playField = document.createElement('div');
 playField.classList.add("play-field");
 
-document.body.append(playField);
+// TIMER //
+
+let timerInterval;
+let totalSeconds = 0;
+
+let timer = document.createElement('div');
+timer.classList.add('timer');
+timer.textContent = '00:00';
+
+secondScreen.append(timer);
+
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    seconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+let timerStarted = false;
+function startTimer() {
+    if(!timerStarted) {
+        timerStarted = true;
+        totalSeconds = 0;
+        timer.textContent = formatTime(totalSeconds);
+        timerInterval = setInterval(() => {
+            totalSeconds += 1;
+            timer.textContent = formatTime(totalSeconds);
+        }, 1000);
+    }
+}
+
+function resetTimer() {
+    totalSeconds = 0;
+    timerStarted = false;
+    timer.textContent = '00:00';
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+}
+
+// GAME PROCESS //
+
+document.body.append(secondScreen);
+secondScreen.append(playField);
 
 let currentLevel = 'easy';
 
 startBtn.addEventListener ('click', () => {
+    resetTimer();
+    stopTimer();
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     if (!currentLevel) {
         currentLevel = 'easy';
     }
@@ -129,13 +178,16 @@ let playArea = document.createElement('div');
 playArea.classList.add('play-area');
 playField.append(playArea);
 
+let grid = [];
+let matrixSize = 0;
+
 let currentState = [];
 function createPlayField(matrixSize, template) {
     playArea.innerHTML = '';
 
     let rowHints = template.rowHints;
     let colHints = template.colHints;
-    let grid = template.grid;
+    grid = template.grid;
 
     let gameField = document.createElement('div');
     gameField.classList.add('game-field');
@@ -197,6 +249,7 @@ function createPlayField(matrixSize, template) {
             cell.setAttribute('data-i', i);
             cell.setAttribute('data-j', j);
             cell.addEventListener('click', () => {
+                startTimer();
                 cell.classList.toggle('cell-button-active');
                 currentState[i][j] = cell.classList.contains('cell-button-active') ? 1 : 0;
                 console.log("currentState", currentState);
@@ -205,6 +258,7 @@ function createPlayField(matrixSize, template) {
                 cellStatus(cell, i, j, currentState, grid);
             });
             cell.addEventListener('contextmenu', (event) => {
+                startTimer();
                 event.preventDefault();
                 let clicks = parseInt(cell.getAttribute('data-clicks')) || 0;
                 let icon = cell.querySelector('i');
@@ -225,6 +279,7 @@ function createPlayField(matrixSize, template) {
                         cell.classList.add('cell-button-disabled-i');
                         cell.classList.add('cell-button-disabled');
                     }
+                    currentState[i][j] = -1;
                 } else if (clicks > 0 && icon) {
                     icon.remove();
                     cell.setAttribute('data-clicks', '0');
@@ -244,6 +299,7 @@ function createPlayField(matrixSize, template) {
     gameField.appendChild(rows);
     playArea.appendChild(gameField);
 }
+
 function cellStatus(cell, i, j, currentState, grid) {
     if (currentState[i][j] === grid[i][j] && grid[i][j] === 1) {
         cell.classList.add('cell-button-disabled');
@@ -286,6 +342,7 @@ function checkWin(currentState, grid) {
         allCells.forEach(cell => {
             cell.classList.add('cell-button-disabled');
         });
+        stopTimer();
         setTimeout(() => {
             alert("Поздравляем! Вы выиграли!");
         }, 100);
@@ -338,7 +395,11 @@ easyBtn.addEventListener('click', () => {
     currentLevel = "easy";
     easyList.style.display = 'flex';
     easyList.classList.add('show');
+    document.body.classList.add('easy-list-open');
+    resetTimer();
+    stopTimer();
 })
+
 
 let easyListTitle = document.createElement('div');
 easyListTitle.classList.add('easy-list-title');
@@ -360,8 +421,9 @@ templateOneEasy.append(oneText);
 
 templateOneEasy.addEventListener('click', () => {
     easyList.classList.remove('show');
+    document.body.classList.remove('easy-list-open');
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     startGame(currentLevel, "one");
 });
 
@@ -378,8 +440,9 @@ templateTwoEasy.append(twoText);
 
 templateTwoEasy.addEventListener('click', () => {
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     easyList.classList.remove('show');
+    document.body.classList.remove('easy-list-open');
     startGame(currentLevel, "cancel");
 });
 
@@ -396,8 +459,9 @@ templateThreeEasy.append(threeText);
 
 templateThreeEasy.addEventListener('click', () => {
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     easyList.classList.remove('show');
+    document.body.classList.remove('easy-list-open');
     startGame(currentLevel, "dumbbell");
 });
 
@@ -414,8 +478,9 @@ templateFourEasy.append(fourText);
 
 templateFourEasy.addEventListener('click', () => {
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     easyList.classList.remove('show');
+    document.body.classList.remove('easy-list-open');
     startGame(currentLevel, "button");
 });
 
@@ -432,8 +497,9 @@ templateFiveEasy.append(fiveText);
 
 templateFiveEasy.addEventListener('click', () => {
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     easyList.classList.remove('show');
+    document.body.classList.remove('easy-list-open');
     startGame(currentLevel, "abstraction");
 });
 
@@ -445,6 +511,7 @@ cancelBtn.append(icon);
 
 cancelBtn.addEventListener ("click", () => {
     easyList.classList.remove('show');
+    document.body.classList.remove('easy-list-open');
 })
 
 easyList.append(easyListTitle);
@@ -455,7 +522,7 @@ easyBtns.append(templateThreeEasy);
 easyBtns.append(templateFourEasy);
 easyBtns.append(templateFiveEasy);
 easyList.append(easyBtns);
-playField.append(easyList);
+secondScreen.append(easyList);
 
 
 // medium level //
@@ -466,7 +533,10 @@ mediumList.classList.add('medium-list');
 mediumBtn.addEventListener('click', () => {
     currentLevel = "medium";
     mediumList.style.display = 'flex';
+    document.body.classList.add('medium-list-open');
     mediumList.classList.add('show');
+    resetTimer();
+    stopTimer();
 })
 
 let mediumListTitle = document.createElement('div');
@@ -489,8 +559,9 @@ templateOneMedium.append(oneTextMedium);
 
 templateOneMedium.addEventListener('click', () => {
     mediumList.classList.remove('show');
+    document.body.classList.remove('medium-list-open');
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     startGame(currentLevel, "question mark");
 });
 
@@ -507,8 +578,9 @@ templateTwoMedium.append(twoTextMedium);
 
 templateTwoMedium.addEventListener('click', () => {
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     mediumList.classList.remove('show');
+    document.body.classList.remove('medium-list-open');
     startGame(currentLevel, "camel");
 });
 
@@ -525,8 +597,9 @@ templateThreeMedium.append(threeTextMedium);
 
 templateThreeMedium.addEventListener('click', () => {
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     mediumList.classList.remove('show');
+    document.body.classList.remove('medium-list-open');
     startGame(currentLevel, "pattern");
 });
 
@@ -543,8 +616,9 @@ templateFourMedium.append(fourTextMedium);
 
 templateFourMedium.addEventListener('click', () => {
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     mediumList.classList.remove('show');
+    document.body.classList.remove('medium-list-open');
     startGame(currentLevel, "emblem");
 });
 
@@ -561,8 +635,9 @@ templateFiveMedium.append(fiveTextMedium);
 
 templateFiveMedium.addEventListener('click', () => {
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     mediumList.classList.remove('show');
+    document.body.classList.remove('medium-list-open');
     startGame(currentLevel, "alien");
 });
 
@@ -574,6 +649,7 @@ cancelBtnMedium.append(icon2);
 
 cancelBtnMedium.addEventListener ("click", () => {
     mediumList.classList.remove('show');
+    document.body.classList.remove('medium-list-open');
 })
 
 mediumList.append(mediumListTitle);
@@ -584,7 +660,7 @@ mediumBtns.append(templateThreeMedium);
 mediumBtns.append(templateFourMedium);
 mediumBtns.append(templateFiveMedium);
 mediumList.append(mediumBtns);
-playField.append(mediumList);
+secondScreen.append(mediumList);
 
 // hard level //
 
@@ -594,7 +670,10 @@ hardList.classList.add('hard-list');
 hardBtn.addEventListener('click', () => {
     currentLevel = "hard";
     hardList.style.display = 'flex';
+    document.body.classList.add('hard-list-open');
     hardList.classList.add('show');
+    resetTimer();
+    stopTimer();
 })
 
 let hardListTitle = document.createElement('div');
@@ -617,8 +696,9 @@ templateOneHard.append(oneTextHard);
 
 templateOneHard.addEventListener('click', () => {
     hardList.classList.remove('show');
+    document.body.classList.remove('hard-list-open');
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     startGame(currentLevel, "arrow");
 });
 
@@ -635,8 +715,9 @@ templateTwoHard.append(twoTextHard);
 
 templateTwoHard.addEventListener('click', () => {
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     hardList.classList.remove('show');
+    document.body.classList.remove('hard-list-open');
     startGame(currentLevel, "wrench");
 });
 
@@ -653,8 +734,9 @@ templateThreeHard.append(threeTextHard);
 
 templateThreeHard.addEventListener('click', () => {
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     hardList.classList.remove('show');
+    document.body.classList.remove('hard-list-open');
     startGame(currentLevel, "crab");
 });
 
@@ -672,8 +754,9 @@ templateFourHard.append(fourTextHard);
 
 templateFourHard.addEventListener('click', () => {
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     hardList.classList.remove('show');
+    document.body.classList.remove('hard-list-open');
     startGame(currentLevel, "car");
 });
 
@@ -690,8 +773,9 @@ templateFiveHard.append(fiveTextHard);
 
 templateFiveHard.addEventListener('click', () => {
     startScreen.style.display = 'none';
-    playField.style.display = 'flex';
+    secondScreen.style.display = 'flex';
     hardList.classList.remove('show');
+    document.body.classList.remove('hard-list-open');
     startGame(currentLevel, "coffee");
 });
 
@@ -703,6 +787,7 @@ cancelBtnHard.append(icon3);
 
 cancelBtnHard.addEventListener ("click", () => {
    hardList.classList.remove('show');
+   document.body.classList.remove('hard-list-open');
 })
 
 hardList.append(hardListTitle);
@@ -714,9 +799,9 @@ hardBtns.append(templateFourHard);
 hardBtns.append(templateFiveHard);
 hardList.append(hardBtns);
 
-playField.append(hardList);
+secondScreen.append(hardList);
 
-// Reset button - extra options //
+// RESET BUTTON //
 
 let resetBtn = document.createElement('button');
 resetBtn.textContent = 'Reset game';
@@ -730,6 +815,7 @@ randomGameBtn.textContent = 'Random Game';
 extraOptions.append(resetBtn);
 extraOptions.append(randomGameBtn);
 extraOptions.append(levelDiv);
+playField.append(extraOptions);
 
 resetBtn.addEventListener('click', () => {
     for (let i = 0; i < matrixSize; i++) {
@@ -748,6 +834,8 @@ resetBtn.addEventListener('click', () => {
 })
 
 randomGameBtn.addEventListener("click", () => {
+    resetTimer();
+    stopTimer();
     const availableSizes = [5, 10, 15];
     
     const randomSize = availableSizes[Math.floor(Math.random() * availableSizes.length)];
@@ -766,8 +854,3 @@ randomGameBtn.addEventListener("click", () => {
 
     startGame(currentLevel);
 });
-
-
-playField.append(extraOptions);
-
-
