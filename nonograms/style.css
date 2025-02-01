@@ -33,11 +33,13 @@ body {
     height: auto;
     margin: auto;
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    gap: 2rem;
     background-color: rgb(192, 192, 192);
     z-index: 10;
+}
+.start-screen {
+    flex-direction: column;
+    gap: 2rem;
 }
 .play-field {
     display: none;
@@ -85,7 +87,7 @@ body {
     margin: auto;
     text-align: center;
     font-family: "Reggae One", serif;
-    font-size: 3rem;
+    font-size: 2rem;
     color: rgb(0, 51, 25);
 }
 .level-buttons {
@@ -93,15 +95,15 @@ body {
     height: auto;
     margin: auto;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 5rem;
+    gap: 2rem;
 }
 .easy-button,
 .medium-button,
 .hard-button,
-.reset-button {
+.reset-button,
+.new-game-button {
     width: 15rem;
     height: auto;
     padding: 0.1rem;
@@ -109,18 +111,25 @@ body {
     border-radius: 1.5rem;
     text-align: center;
     font-family: "Jost", serif;
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     transition: transform 0.2s;
     cursor: pointer;
 }
 .easy-button:hover,
 .medium-button:hover,
-.hard-button:hover {
+.hard-button:hover,
+.reset-button:hover,
+.new-game-button:hover {
     background-color: rgb(0, 51, 25);
     color: white;
     transform: scale(1.05); 
 }
-
+.reset-button-disabled {
+    border: 0.2rem solid rgb(192, 192, 192);;
+    color: rgb(192, 192, 192);
+    cursor: not-allowed;
+    pointer-events: none;
+}
 /* LEVEL CHOSE */
 
 .easy-list,
@@ -280,6 +289,13 @@ body {
 }
 
 /* PLAY FIELD */
+
+.extra-options {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
 
 .play-area {
     width: 80%;

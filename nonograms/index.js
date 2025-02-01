@@ -48,9 +48,259 @@ startBtn.classList.add("start-button");
 startBtn.textContent = 'Start game';
 startScreen.append(startBtn);
 
+document.body.append(startScreen);
+
+// START GAME // 
+
+
+function selectLevel(levelSelected) {
+    let matrix;
+    if (levelSelected === 'easy') {
+        matrix = 5;
+    } else if (levelSelected === 'medium') {
+        matrix = 10;
+    } else if (levelSelected === 'hard') {
+        matrix = 15;
+    } else if (levelSelected === 'random') {
+        const sizes = [5, 10, 15];
+        matrix = sizes[Math.floor(Math.random() * sizes.length)];
+    }
+    return matrix;
+}
+
+async function startGame(level, templateName) {
+    await loadJSON();
+
+    matrixSize = selectLevel(level); 
+    console.log("Размер матрицы после selectLevel:", matrixSize);
+    
+
+    let matrixKey = matrixSize + "x" + matrixSize;
+    console.log("Ключ для поиска шаблона:", matrixKey);
+    
+    if (jsonTemplates[matrixKey]) {
+        let template;
+        
+        if (templateName) {
+            // Если задано имя шаблона, используем его
+            template = jsonTemplates[matrixKey][templateName];
+        } else {
+            // Иначе, получаем случайный шаблон
+            template = getRandomTemplate(matrixSize);
+        }
+
+        if (template) {
+            createPlayField(matrixSize, template); // Создаем игровое поле
+        } else {
+            console.error("Шаблон не найден:", templateName);
+        }
+    } else {
+        console.error("Шаблоны для указанного размера не найдены:", matrixKey);
+    }
+}
+
+
+function getRandomTemplate(size) {
+    let templates = Object.keys(jsonTemplates[size + "x" + size]);
+    let randomName = templates[Math.floor(Math.random() * templates.length)];
+    return jsonTemplates[size + "x" + size][randomName];
+}
+
+
+// PLAY AREA //
+
+let playField = document.createElement('div');
+playField.classList.add("play-field");
+
+document.body.append(playField);
+
+let currentLevel = 'easy';
+
+startBtn.addEventListener ('click', () => {
+    startScreen.style.display = 'none';
+    playField.style.display = 'flex';
+    if (!currentLevel) {
+        currentLevel = 'easy';
+    }
+    startGame(currentLevel);
+})
+
+let playArea = document.createElement('div');
+playArea.classList.add('play-area');
+playField.append(playArea);
+
+let currentState = [];
+function createPlayField(matrixSize, template) {
+    playArea.innerHTML = '';
+
+    let rowHints = template.rowHints;
+    let colHints = template.colHints;
+    let grid = template.grid;
+
+    let gameField = document.createElement('div');
+    gameField.classList.add('game-field');
+
+    let topHints = document.createElement('div');
+    topHints.classList.add('top-hints');
+
+    topHints.style.display = 'grid';
+    topHints.style.gridTemplateColumns = `repeat(${matrixSize}, 1fr)`; 
+
+    for (let i = 0; i < matrixSize; i++) {
+        let colHintContainer = document.createElement('div');
+        colHintContainer.classList.add('col-hint-container');
+        if (colHints[i].length > 0) {
+            colHints[i].forEach((hint) => {
+                let colHint = document.createElement('div');
+                colHint.classList.add('col-hint');
+                colHint.textContent = hint;
+                colHintContainer.appendChild(colHint);
+            });
+        }
+        topHints.appendChild(colHintContainer);
+    }
+
+    let leftHints = document.createElement('div');
+    leftHints.classList.add('left-hints');
+
+    leftHints.style.display = 'grid';
+    leftHints.style.gridTemplateRows = `repeat(${matrixSize}, 1fr)`;
+
+    for (let i = 0; i < matrixSize; i++) {
+        let rowHintContainer = document.createElement('div');
+        rowHintContainer.classList.add('row-hint-container');
+        if (rowHints[i].length > 0) {
+            rowHints[i].forEach((hint) => {
+                let rowHint = document.createElement('div');
+                rowHint.classList.add('row-hint');
+                rowHint.textContent = hint;
+                rowHintContainer.appendChild(rowHint);
+            });
+        }
+        leftHints.appendChild(rowHintContainer);
+    }
+
+    for (let i = 0; i < matrixSize; i++) {
+        currentState[i] = [];
+        for (let j = 0; j < matrixSize; j++) {
+            currentState[i][j] = 0;
+        }
+    }
+ 
+    let rows = document.createElement('div');
+    for (let i = 0; i < matrixSize; i++) {
+        let row = document.createElement('div');
+        row.classList.add('row');
+        for (let j = 0; j < matrixSize; j++) {
+            let cell = document.createElement('button');
+            cell.classList.add("cell-button");
+            cell.setAttribute('data-i', i);
+            cell.setAttribute('data-j', j);
+            cell.addEventListener('click', () => {
+                cell.classList.toggle('cell-button-active');
+                currentState[i][j] = cell.classList.contains('cell-button-active') ? 1 : 0;
+                console.log("currentState", currentState);
+                console.log("grid", grid);
+
+                cellStatus(cell, i, j, currentState, grid);
+            });
+            cell.addEventListener('contextmenu', (event) => {
+                event.preventDefault();
+                let clicks = parseInt(cell.getAttribute('data-clicks')) || 0;
+                let icon = cell.querySelector('i');
+                if (clicks === 0) {
+                    clicks++;
+                    cell.setAttribute('data-clicks', clicks);
+                    cell.classList.remove('cell-button-active');
+                    icon = document.createElement('i');
+                    icon.classList.add('fa-solid', 'fa-xmark');
+                    cell.appendChild(icon);
+                    if (grid[i][j] === 1) {
+                        cell.classList.add('cell-button-wrong');
+                        setTimeout(() => {
+                            cell.classList.remove('cell-button-wrong');
+                        }, 500);
+                    }
+                    if (grid[i][j] === 0) {
+                        cell.classList.add('cell-button-disabled-i');
+                        cell.classList.add('cell-button-disabled');
+                    }
+                } else if (clicks > 0 && icon) {
+                    icon.remove();
+                    cell.setAttribute('data-clicks', '0');
+                    clicks = 0;
+                }
+                cellStatus(cell, i, j, currentState, grid);
+            });
+            row.appendChild(cell);
+        }
+        rows.appendChild(row);
+    }
+
+    let emptyDiv = document.createElement('div');
+    gameField.appendChild(emptyDiv);
+    gameField.appendChild(topHints);
+    gameField.appendChild(leftHints);
+    gameField.appendChild(rows);
+    playArea.appendChild(gameField);
+}
+function cellStatus(cell, i, j, currentState, grid) {
+    if (currentState[i][j] === grid[i][j] && grid[i][j] === 1) {
+        cell.classList.add('cell-button-disabled');
+    } else if (currentState[i][j] === 0) {
+        cell.classList.remove('cell-button-disabled');
+    } else {
+        cell.classList.add('cell-button-wrong');
+        setTimeout(() => {
+            cell.classList.remove('cell-button-wrong');
+        }, 500);
+        console.log(`Ячейка [${i}, ${j}] неверна!`);
+    }
+
+    checkWin(currentState, grid);
+}
+
+function checkWin(currentState, grid) {
+    let correct = true;
+    for (let i = 0; i < grid.length; i++) {
+        for (let j = 0; j < grid[i].length; j++) {
+            let cell = document.querySelector(`.cell-button[data-i="${i}"][data-j="${j}"]`);
+            let icon = cell ? cell.querySelector('i') : null;
+            if (icon && icon.classList.contains('fa-xmark')) {
+                if (grid[i][j] === 1) {
+                    correct = false;
+                    console.log(`Ячейка [${i}, ${j}] имеет крестик, но должна быть заполнена!`);
+                }
+                continue;
+            }
+            if (currentState[i][j] !== grid[i][j]) {
+                correct = false;
+                console.log("It's not a win yet");
+            }
+        }
+    }
+    if (correct) {
+        console.log("Победа!");
+        resetBtn.classList.add('reset-button-disabled');
+        const allCells = document.querySelectorAll('.cell-button');
+        allCells.forEach(cell => {
+            cell.classList.add('cell-button-disabled');
+        });
+        setTimeout(() => {
+            alert("Поздравляем! Вы выиграли!");
+        }, 100);
+    }
+}
+
+let extraOptions = document.createElement('div');
+extraOptions.classList.add('extra-options');
+
+
+// LEVEL CHOSE //
+
 let levelDiv = document.createElement('div');
 levelDiv.classList.add('level-div');
-startScreen.append(levelDiv);
+extraOptions.append(levelDiv);
 
 let chooseLevel = document.createElement('div');
 chooseLevel.classList.add('choose-level');
@@ -79,10 +329,6 @@ levelBtns.append(hardBtn);
 levelDiv.append(levelBtns);
 
 
-document.body.append(startScreen);
-
-// LEVEL CHOSE //
-
 // easy level //
 
 let easyList = document.createElement('div');
@@ -93,7 +339,6 @@ easyBtn.addEventListener('click', () => {
     easyList.style.display = 'flex';
     easyList.classList.add('show');
 })
-
 
 let easyListTitle = document.createElement('div');
 easyListTitle.classList.add('easy-list-title');
@@ -210,7 +455,7 @@ easyBtns.append(templateThreeEasy);
 easyBtns.append(templateFourEasy);
 easyBtns.append(templateFiveEasy);
 easyList.append(easyBtns);
-startScreen.append(easyList);
+playField.append(easyList);
 
 
 // medium level //
@@ -291,7 +536,7 @@ let fourImgMedium = document.createElement('img');
 fourImgMedium.src = './img/10.10emblem.jpeg';
 fourImgMedium.alt = 'Emblem';
 let fourTextMedium = document.createElement('div');
-fourTextMedium.textContent = "Pattern";
+fourTextMedium.textContent = "Emblem";
 fourTextMedium.classList.add('three-text-medium');
 templateFourMedium.append(fourImgMedium);
 templateFourMedium.append(fourTextMedium);
@@ -339,7 +584,7 @@ mediumBtns.append(templateThreeMedium);
 mediumBtns.append(templateFourMedium);
 mediumBtns.append(templateFiveMedium);
 mediumList.append(mediumBtns);
-startScreen.append(mediumList);
+playField.append(mediumList);
 
 // hard level //
 
@@ -469,239 +714,60 @@ hardBtns.append(templateFourHard);
 hardBtns.append(templateFiveHard);
 hardList.append(hardBtns);
 
-startScreen.append(hardList);
+playField.append(hardList);
 
-// START GAME // 
+// Reset button - extra options //
 
+let resetBtn = document.createElement('button');
+resetBtn.textContent = 'Reset game';
+resetBtn.classList.add('reset-button');
 
-function selectLevel(levelSelected) {
-    let matrix;
-    if (levelSelected === 'easy') {
-        matrix = 5;
-    } else if (levelSelected === 'medium') {
-        matrix = 10;
-    } else if (levelSelected === 'hard') {
-        matrix = 15;
-    }
-    return matrix;
-}
-
-async function startGame(level, templateName) {
-    await loadJSON();
-    matrixSize = selectLevel(level);
-    console.log("Размер матрицы после selectLevel:", matrixSize);
-    let matrixKey = matrixSize + "x" + matrixSize;
-    if (jsonTemplates[matrixKey]) {
-        let template;
-        if (templateName) {
-            template = jsonTemplates[matrixKey][templateName];
-        } else {
-            template = getRandomTemplate(matrixSize);
-        }
-
-        if (template) {
-            createPlayField(matrixSize, template);
-        } else {
-            console.error("Шаблон не найден:", templateName);
-        }
-    }
-}
+let randomGameBtn = document.createElement('button');
+randomGameBtn.classList.add('new-game-button')
+randomGameBtn.textContent = 'Random Game';
 
 
-function getRandomTemplate(size) {
-    let templates = Object.keys(jsonTemplates[size + "x" + size]);
-    let randomName = templates[Math.floor(Math.random() * templates.length)];
-    return jsonTemplates[size + "x" + size][randomName];
-}
+extraOptions.append(resetBtn);
+extraOptions.append(randomGameBtn);
+extraOptions.append(levelDiv);
 
-
-// PLAY AREA //
-
-let playField = document.createElement('div');
-playField.classList.add("play-field");
-
-document.body.append(playField);
-
-let currentLevel = 'easy';
-
-startBtn.addEventListener ('click', () => {
-    startScreen.style.display = 'none';
-    playField.style.display = 'flex';
-    if (!currentLevel) {
-        currentLevel = 'easy';
-    }
-    startGame(currentLevel);
-})
-
-let playArea = document.createElement('div');
-playArea.classList.add('play-area');
-playField.append(playArea);
-
-function createPlayField(matrixSize, template) {
-    console.log("createPlayField вызвана с matrixSize:", matrixSize, "и template:", template);
-    playArea.innerHTML = '';
-
-    let rowHints = template.rowHints;
-    let colHints = template.colHints;
-    let grid = template.grid;
-
-    let gameField = document.createElement('div');
-    gameField.classList.add('game-field');
-
-    let topHints = document.createElement('div');
-    topHints.classList.add('top-hints');
-
-    topHints.style.display = 'grid';
-    topHints.style.gridTemplateColumns = `repeat(${matrixSize}, 1fr)`; 
-
+resetBtn.addEventListener('click', () => {
     for (let i = 0; i < matrixSize; i++) {
-        let colHintContainer = document.createElement('div');
-        colHintContainer.classList.add('col-hint-container');
-        if (colHints[i].length > 0) {
-            colHints[i].forEach((hint) => {
-                let colHint = document.createElement('div');
-                colHint.classList.add('col-hint');
-                colHint.textContent = hint;
-                colHintContainer.appendChild(colHint);
-            });
-        }
-        topHints.appendChild(colHintContainer);
-    }
-
-    let leftHints = document.createElement('div');
-    leftHints.classList.add('left-hints');
-
-    leftHints.style.display = 'grid';
-    leftHints.style.gridTemplateRows = `repeat(${matrixSize}, 1fr)`;
-
-    for (let i = 0; i < matrixSize; i++) {
-        let rowHintContainer = document.createElement('div');
-        rowHintContainer.classList.add('row-hint-container');
-        if (rowHints[i].length > 0) {
-            rowHints[i].forEach((hint) => {
-                let rowHint = document.createElement('div');
-                rowHint.classList.add('row-hint');
-                rowHint.textContent = hint;
-                rowHintContainer.appendChild(rowHint);
-            });
-        }
-        leftHints.appendChild(rowHintContainer);
-    }
-
-    let currentState = [];
-    for (let i = 0; i < matrixSize; i++) {
-        currentState[i] = [];
         for (let j = 0; j < matrixSize; j++) {
             currentState[i][j] = 0;
         }
     }
- 
-    let rows = document.createElement('div');
-    for (let i = 0; i < matrixSize; i++) {
-        let row = document.createElement('div');
-        row.classList.add('row');
-        for (let j = 0; j < matrixSize; j++) {
-            let cell = document.createElement('button');
-            cell.classList.add("cell-button");
-            cell.setAttribute('data-i', i);
-            cell.setAttribute('data-j', j);
-            cell.addEventListener('click', () => {
-                cell.classList.toggle('cell-button-active');
-                currentState[i][j] = cell.classList.contains('cell-button-active') ? 1 : 0;
-                console.log("currentState", currentState);
-                console.log("grid", grid);
 
-                cellStatus(cell, i, j, currentState, grid);
-            });
-            let clicks = 0;
-            cell.addEventListener('contextmenu', (event) => {
-                event.preventDefault();
-                let icon = cell.querySelector('i');
-                if (clicks === 0) {
-                    clicks++;
-                    cell.classList.remove('cell-button-active');
-                    icon = document.createElement('i');
-                    icon.classList.add('fa-solid', 'fa-xmark');
-                    cell.appendChild(icon);
-                    if (grid[i][j] === 1) {
-                        cell.classList.add('cell-button-wrong');
-                        setTimeout(() => {
-                            cell.classList.remove('cell-button-wrong');
-                        }, 500);
-                    }
-                    if (grid[i][j] === 0) {
-                        cell.classList.add('cell-button-disabled-i');
-                        cell.classList.add('cell-button-disabled');
-                    }
-                } else if (clicks > 0 && icon) {
-                    icon.remove();
-                    clicks = 0;
-                }
-                cellStatus(cell, i, j, currentState, grid);
-            });
-            row.appendChild(cell);
-        }
-        rows.appendChild(row);
+    const allCells = document.querySelectorAll('.cell-button');
+    allCells.forEach(cell => {
+        cell.classList.remove('cell-button-active', 'cell-button-wrong', 'cell-button-disabled', 'cell-button-disabled-i');
+        let icon = cell.querySelector('i');
+        if (icon) icon.remove();
+        cell.setAttribute('data-clicks', '0');
+    });
+})
+
+randomGameBtn.addEventListener("click", () => {
+    const availableSizes = [5, 10, 15];
+    
+    const randomSize = availableSizes[Math.floor(Math.random() * availableSizes.length)];
+    console.log('Randomsize:', randomSize)
+    const templatesForSize = jsonTemplates[randomSize];
+
+    if (randomSize === 5) {
+        currentLevel = 'easy';
+    }
+    if (randomSize === 10) {
+        currentLevel = 'medium';
+    }
+    if (randomSize === 15) {
+        currentLevel = 'hard';
     }
 
-    let emptyDiv = document.createElement('div');
-    gameField.appendChild(emptyDiv);
-    gameField.appendChild(topHints);
-    gameField.appendChild(leftHints);
-    gameField.appendChild(rows);
-    playArea.appendChild(gameField);
-}
-function cellStatus(cell, i, j, currentState, grid) {
-    if (currentState[i][j] === grid[i][j] && grid[i][j] === 1) {
-        cell.classList.add('cell-button-disabled');
-    } else if (currentState[i][j] === 0) {
-        cell.classList.remove('cell-button-disabled');
-    } else {
-        cell.classList.add('cell-button-wrong');
-        setTimeout(() => {
-            cell.classList.remove('cell-button-wrong');
-        }, 500);
-        console.log(`Ячейка [${i}, ${j}] неверна!`);
-    }
+    startGame(currentLevel);
+});
 
-    checkWin(currentState, grid);
-}
 
-function checkWin(currentState, grid) {
-    let correct = true;
-    for (let i = 0; i < grid.length; i++) {
-        for (let j = 0; j < grid[i].length; j++) {
-            let cell = document.querySelector(`.cell-button[data-i="${i}"][data-j="${j}"]`);
-            let icon = cell ? cell.querySelector('i') : null;
-            if (icon && icon.classList.contains('fa-xmark')) {
-                if (grid[i][j] === 1) {
-                    correct = false;
-                    console.log(`Ячейка [${i}, ${j}] имеет крестик, но должна быть заполнена!`);
-                }
-                continue;
-            }
-            if (currentState[i][j] !== grid[i][j]) {
-                correct = false;
-                console.log("It's not a win yet");
-            }
-        }
-    }
-    if (correct) {
-        console.log("Победа!");
-        const allCells = document.querySelectorAll('.cell-button');
-        allCells.forEach(cell => {
-            cell.classList.add('cell-button-disabled');
-        });
-        setTimeout(() => {
-            alert("Поздравляем! Вы выиграли!");
-        }, 100);
-    }
-}
+playField.append(extraOptions);
 
-// EXTRA OPTIONS //
 
-let resetBtn = document.createElement('button');
-resetBtn.textContent = 'Reset game';
-resetBtn.classlist.add('reset-button');
-
-playField.append(resetBtn);
