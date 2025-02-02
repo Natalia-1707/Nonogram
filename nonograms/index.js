@@ -476,7 +476,7 @@ easyBtns.classList.add('easy-buttons-div');
 let templateOneEasy = document.createElement('button');
 templateOneEasy.classList.add('one-easy-button');
 let oneImg = document.createElement('img');
-oneImg.src = './img/5.5one.jpeg';
+oneImg.src = './img/one.jpeg';
 oneImg.alt = 'Digit one';
 let oneText = document.createElement('div');
 oneText.textContent = "Digit 1";
@@ -495,7 +495,7 @@ templateOneEasy.addEventListener('click', () => {
 let templateTwoEasy = document.createElement('button');
 templateTwoEasy.classList.add('two-easy-button');
 let twoImg = document.createElement('img');
-twoImg.src = './img/5.5cancel.jpeg';
+twoImg.src = './img/cancel.jpeg';
 twoImg.alt = 'Cancel';
 let twoText = document.createElement('div');
 twoText.textContent = "Cancel";
@@ -514,7 +514,7 @@ templateTwoEasy.addEventListener('click', () => {
 let templateThreeEasy = document.createElement('button');
 templateThreeEasy.classList.add('three-easy-button');
 let threeImg = document.createElement('img');
-threeImg.src = './img/5.5dumbbell.jpeg';
+threeImg.src = './img/dumbbell.jpeg';
 threeImg.alt = 'Dumbbell';
 let threeText = document.createElement('div');
 threeText.textContent = "Dumbbell";
@@ -533,7 +533,7 @@ templateThreeEasy.addEventListener('click', () => {
 let templateFourEasy = document.createElement('button');
 templateFourEasy.classList.add('four-easy-button');
 let fourImg = document.createElement('img');
-fourImg.src = './img/5.5button.jpeg';
+fourImg.src = './img/button.jpeg';
 fourImg.alt = 'Button';
 let fourText = document.createElement('div');
 fourText.textContent = "Button";
@@ -552,7 +552,7 @@ templateFourEasy.addEventListener('click', () => {
 let templateFiveEasy = document.createElement('button');
 templateFiveEasy.classList.add('five-easy-button');
 let fiveImg = document.createElement('img');
-fiveImg.src = './img/5.5abstraction.jpeg';
+fiveImg.src = './img/abstraction.jpeg';
 fiveImg.alt = 'Abstraction';
 let fiveText = document.createElement('div');
 fiveText.textContent = "Abstraction";
@@ -614,7 +614,7 @@ mediumBtns.classList.add('medium-buttons-div');
 let templateOneMedium = document.createElement('button');
 templateOneMedium.classList.add('one-medium-button');
 let oneImgMedium = document.createElement('img');
-oneImgMedium.src = './img/10.10questionmark.jpeg';
+oneImgMedium.src = './img/question mark.jpeg';
 oneImgMedium.alt = 'Question mark';
 let oneTextMedium = document.createElement('div');
 oneTextMedium.textContent = "Question mark";
@@ -633,7 +633,7 @@ templateOneMedium.addEventListener('click', () => {
 let templateTwoMedium = document.createElement('button');
 templateTwoMedium.classList.add('two-medium-button');
 let twoImgMedium = document.createElement('img');
-twoImgMedium.src = './img/10.10camel.jpeg';
+twoImgMedium.src = './img/camel.jpeg';
 twoImgMedium.alt = 'Camel';
 let twoTextMedium = document.createElement('div');
 twoTextMedium.textContent = "Camel";
@@ -652,7 +652,7 @@ templateTwoMedium.addEventListener('click', () => {
 let templateThreeMedium = document.createElement('button');
 templateThreeMedium.classList.add('three-medium-button');
 let threeImgMedium = document.createElement('img');
-threeImgMedium.src = './img/10.10pattern.jpeg';
+threeImgMedium.src = './img/pattern.jpeg';
 threeImgMedium.alt = 'Pattern';
 let threeTextMedium = document.createElement('div');
 threeTextMedium.textContent = "Pattern";
@@ -671,7 +671,7 @@ templateThreeMedium.addEventListener('click', () => {
 let templateFourMedium = document.createElement('button');
 templateFourMedium.classList.add('four-medium-button');
 let fourImgMedium = document.createElement('img');
-fourImgMedium.src = './img/10.10emblem.jpeg';
+fourImgMedium.src = './img/emblem.jpeg';
 fourImgMedium.alt = 'Emblem';
 let fourTextMedium = document.createElement('div');
 fourTextMedium.textContent = "Emblem";
@@ -690,7 +690,7 @@ templateFourMedium.addEventListener('click', () => {
 let templateFiveMedium = document.createElement('button');
 templateFiveMedium.classList.add('five-medium-button');
 let fiveImgMedium = document.createElement('img');
-fiveImgMedium.src = './img/10.10alien.jpeg';
+fiveImgMedium.src = './img/alien.jpeg';
 fiveImgMedium.alt = 'Alien';
 let fiveTextMedium = document.createElement('div');
 fiveTextMedium.textContent = "Alien";
@@ -751,7 +751,7 @@ hardBtns.classList.add('hard-buttons-div');
 let templateOneHard = document.createElement('button');
 templateOneHard.classList.add('one-hard-button');
 let oneImgHard = document.createElement('img');
-oneImgHard.src = './img/15.15arrow.jpeg';
+oneImgHard.src = './img/arrow.jpeg';
 oneImgHard.alt = 'Arrow';
 let oneTextHard = document.createElement('div');
 oneTextHard.textContent = "Arrow";
@@ -770,7 +770,7 @@ templateOneHard.addEventListener('click', () => {
 let templateTwoHard = document.createElement('button');
 templateTwoHard.classList.add('two-hard-button');
 let twoImgHard = document.createElement('img');
-twoImgHard.src = './img/15.15wrench.jpeg';
+twoImgHard.src = './img/wrench.jpeg';
 twoImgHard.alt = 'Wrench';
 let twoTextHard = document.createElement('div');
 twoTextHard.textContent = "Wrench";
@@ -789,7 +789,7 @@ templateTwoHard.addEventListener('click', () => {
 let templateThreeHard = document.createElement('button');
 templateThreeHard.classList.add('three-hard-button');
 let threeImgHard = document.createElement('img');
-threeImgHard.src = './img/15.15crab.jpeg';
+threeImgHard.src = './img/crab.jpeg';
 threeImgHard.alt = 'Crab';
 let threeTextHard = document.createElement('div');
 threeTextHard.textContent = "Crab";
@@ -809,7 +809,7 @@ templateThreeHard.addEventListener('click', () => {
 let templateFourHard = document.createElement('button');
 templateFourHard.classList.add('four-hard-button');
 let fourImgHard = document.createElement('img');
-fourImgHard.src = './img/15.15car.jpeg';
+fourImgHard.src = './img/car.jpeg';
 fourImgHard.alt = 'Car';
 let fourTextHard = document.createElement('div');
 fourTextHard.textContent = "Car";
@@ -828,7 +828,7 @@ templateFourHard.addEventListener('click', () => {
 let templateFiveHard = document.createElement('button');
 templateFiveHard.classList.add('five-hard-button');
 let fiveImgHard = document.createElement('img');
-fiveImgHard.src = './img/15.15coffee.jpeg';
+fiveImgHard.src = './img/coffee.jpeg';
 fiveImgHard.alt = 'Coffee';
 let fiveTextHard = document.createElement('div');
 fiveTextHard.textContent = "Coffee";
@@ -946,6 +946,9 @@ resultsBtn.addEventListener('click', () => {
     resultsWindow.style.display = 'flex';
     resultsWindow.classList.add('show');
     document.body.classList.add('results-window-open');
+
+
+    updateResults(resultsSave);
 })
 
 let resultsSave = JSON.parse(localStorage.getItem('resultsSave')) || [];
@@ -960,10 +963,61 @@ function saveResult(playerName, templateName, difficulty, time) {
 
     console.log(result); 
 
-    const resultsSave = JSON.parse(localStorage.getItem('resultsSave')) || [];
-    resultsSave.push(result);
-    localStorage.setItem('resultsSave', JSON.stringify(resultsSave));
-    console.log("Результаты после добавления:", resultsSave);
 
-    /*updateResults();*/
+    let resultsSave = JSON.parse(localStorage.getItem('resultsSave')) || [];
+    resultsSave.push(result);
+
+    localStorage.setItem('resultsSave', JSON.stringify(resultsSave));
+
+    updateResults(resultsSave);
+}
+
+let tbody = document.createElement('tbody');
+tableResults.append(tbody);
+
+function updateResults(resultsSave) {
+
+    let existingNoResults = resultsWindow.querySelector('.no-results');
+    if (existingNoResults) {
+        existingNoResults.remove();
+    }
+
+    if (resultsSave.length === 0) {
+        tableResults.innerHTML = '';
+        let noResults = document.createElement('div');
+        noResults.classList.add('no-results');
+        noResults.textContent = "There are no results yet. Try to play";
+        resultsWindow.append(noResults);
+
+    } else {
+        tbody.innerHTML = '';
+
+        let lastFiveResults = resultsSave.slice(-5);
+        lastFiveResults.sort((a, b) => {
+                return a.time - b.time;
+        })
+
+        lastFiveResults.forEach(result => {
+            let tr = document.createElement('tr');
+            let td1 = document.createElement('td');
+            td1.textContent = result.playerName;
+            let td2 = document.createElement('td');
+            td2.classList.add('td2');
+            let td2Text = document.createElement('div');
+            td2Text.textContent = result.template;
+            let resultImg = document.createElement('img');
+            resultImg.classList.add('results-img');
+            resultImg.src = `./img/${result.template}.jpeg`;
+            resultImg.alt = result.template;
+            td2.append(resultImg);
+            td2.append(td2Text);
+            let td3 = document.createElement('td');
+            td3.textContent = result.levelSelected;
+            let td4 = document.createElement('td');
+            td4.textContent = formatTime(result.time);
+
+            tr.append(td1, td2, td3, td4);
+            tbody.append(tr);
+        });
+    }
 }
