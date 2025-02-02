@@ -64,7 +64,6 @@ function playWin() {
     winSound.play();
 }
 
-
 // JSON //
 
 let jsonTemplates = {};
@@ -224,6 +223,10 @@ playField.classList.add("play-field");
 
 // TIMER //
 
+let secondScreenHeader = document.createElement('div');
+secondScreenHeader.classList.add('second-screen-header');
+secondScreen.append(secondScreenHeader);
+
 let timerInterval;
 let totalSeconds = 0;
 
@@ -231,7 +234,7 @@ let timer = document.createElement('div');
 timer.classList.add('timer');
 timer.textContent = '00:00';
 
-secondScreen.append(timer);
+secondScreenHeader.append(timer);
 
 function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
@@ -361,7 +364,6 @@ function createPlayField(matrixSize, template, templateName) {
             cell.setAttribute('data-i', i);
             cell.setAttribute('data-j', j);
             cell.addEventListener('click', () => {
-                playblackCell();
                 startTimer();
                 let icon = cell.querySelector('i');
                 if (icon) {
@@ -370,15 +372,14 @@ function createPlayField(matrixSize, template, templateName) {
                 if (grid[i][j] === 0) {
                     if (!cell.classList.contains('cell-button-wrong')) {
                         cell.classList.add('cell-button-wrong');
-                        console.log(`Ячейка [${i}, ${j}] неверна!`);
                     } else {
-                        cell.classList.remove('cell-button-wrong');
                         playDeleteCell();
-                        console.log(`Удалена ошибка на ячейке [${i}, ${j}]`);
+                        cell.classList.remove('cell-button-wrong');
                     }
                 } else {
                     cell.classList.remove('cell-button-wrong');
                 }
+                playblackCell();
                 cell.classList.toggle('cell-button-active');
                 currentState[i][j] = cell.classList.contains('cell-button-active') ? 1 : 0;
             
@@ -465,17 +466,64 @@ function checkWin(currentState, grid, templateName) {
     if (correct) {
         console.log("Победа!");
         resetBtn.classList.add('reset-button-disabled');
+        easyBtn.classList.add('easy-button-disabled');
+        mediumBtn.classList.add('medium-button-disabled');
+        hardBtn.classList.add('hard-button-disabled');
+        randomGameBtn.classList.add('random-game-button-disabled');
         const allCells = document.querySelectorAll('.cell-button');
         allCells.forEach(cell => {
             cell.classList.add('cell-button-disabled');
         });
         stopTimer();
         saveResult(playerName, templateName, currentLevel, totalSeconds);
+        playWin();
         setTimeout(() => {
-            playWin();
-            alert("Поздравляем! Вы выиграли!");
+            messageWin();
         }, 100);
     }
+}
+
+function messageWin() {
+    document.body.classList.add('win-message-open');
+    let winMessage = document.createElement('div');
+    winMessage.classList.add()
+    winMessage.classList.add('win-message');
+    winMessage.textContent = "Well done! Congrats. Once again?";
+    let cancelBtnMessage = document.createElement('button');
+    cancelBtnMessage.classList.add('cancel-button-message');
+    let icon5 = document.createElement('i');
+    icon5.classList.add('fa-regular', 'fa-circle-xmark');
+    cancelBtnMessage.append(icon5);
+    winMessage.append(cancelBtnMessage);
+
+    let messageNewGameBtn = document.createElement('button');
+    messageNewGameBtn.classList.add('message-new-game-button');
+    messageNewGameBtn.textContent = 'New game';
+    winMessage.append(messageNewGameBtn);
+
+    cancelBtnMessage.addEventListener ("click", () => {
+        winMessage.style.display = 'none';
+        document.body.classList.remove('win-message-open');
+        resetBtn.classList.remove('reset-button-disabled');
+        easyBtn.classList.remove('easy-button-disabled');
+        mediumBtn.classList.remove('medium-button-disabled');
+        hardBtn.classList.remove('hard-button-disabled');
+        randomGameBtn.classList.remove('random-game-button-disabled');
+        
+    })
+    messageNewGameBtn.addEventListener('click', () => {
+        winMessage.style.display = 'none';
+        resetBtn.classList.remove('reset-button-disabled');
+        easyBtn.classList.remove('easy-button-disabled');
+        mediumBtn.classList.remove('medium-button-disabled');
+        hardBtn.classList.remove('hard-button-disabled');
+        randomGameBtn.classList.remove('random-game-button-disabled');
+        startGame(currentLevel);
+        resetTimer();
+        stopTimer();
+        document.body.classList.remove('win-message-open');
+    });
+     secondScreen.append(winMessage);
 }
 
 let extraOptions = document.createElement('div');
@@ -1003,6 +1051,21 @@ inputField.addEventListener("keyup", event => {
 window.addEventListener('load', () => {
     inputField.focus();
 });
+
+// BACK BUTTON //
+
+let backButton = document.createElement ('button');
+backButton.classList.add('back-button');
+backButton.textContent = 'back';
+secondScreenHeader.append(backButton);
+
+backButton.addEventListener('click', () => {
+    secondScreen.style.display = 'none';
+    startScreen.style.display = 'flex';
+    inputField.value = '';
+    resetTimer();
+    stopTimer();
+})
 
 // RESULTS //
 
