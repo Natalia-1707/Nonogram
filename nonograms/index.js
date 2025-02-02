@@ -488,7 +488,8 @@ function messageWin() {
     let winMessage = document.createElement('div');
     winMessage.classList.add()
     winMessage.classList.add('win-message');
-    winMessage.textContent = "Well done! Congrats. Once again?";
+    let timeWord = totalSeconds === 1 ? "second" : "seconds";
+    winMessage.textContent = `Great! You have solved the nonogram in ${totalSeconds} ${timeWord}! Once again?`;
     let cancelBtnMessage = document.createElement('button');
     cancelBtnMessage.classList.add('cancel-button-message');
     let icon5 = document.createElement('i');
@@ -504,7 +505,6 @@ function messageWin() {
     cancelBtnMessage.addEventListener ("click", () => {
         winMessage.style.display = 'none';
         document.body.classList.remove('win-message-open');
-        resetBtn.classList.remove('reset-button-disabled');
         easyBtn.classList.remove('easy-button-disabled');
         mediumBtn.classList.remove('medium-button-disabled');
         hardBtn.classList.remove('hard-button-disabled');
@@ -573,6 +573,7 @@ easyBtn.addEventListener('click', () => {
     easyList.style.display = 'flex';
     easyList.classList.add('show');
     document.body.classList.add('easy-list-open');
+    resetBtn.classList.remove('reset-button-disabled');
     resetTimer();
     stopTimer();
 })
@@ -712,6 +713,7 @@ mediumBtn.addEventListener('click', () => {
     mediumList.style.display = 'flex';
     document.body.classList.add('medium-list-open');
     mediumList.classList.add('show');
+    resetBtn.classList.remove('reset-button-disabled');
     resetTimer();
     stopTimer();
 })
@@ -849,6 +851,7 @@ hardBtn.addEventListener('click', () => {
     hardList.style.display = 'flex';
     document.body.classList.add('hard-list-open');
     hardList.classList.add('show');
+    resetBtn.classList.remove('reset-button-disabled');
     resetTimer();
     stopTimer();
 })
@@ -1013,6 +1016,7 @@ resetBtn.addEventListener('click', () => {
 randomGameBtn.addEventListener("click", () => {
     resetTimer();
     stopTimer();
+    resetBtn.classList.remove('reset-button-disabled');
     const availableSizes = [5, 10, 15];
     
     const randomSize = availableSizes[Math.floor(Math.random() * availableSizes.length)];
@@ -1063,6 +1067,7 @@ backButton.addEventListener('click', () => {
     secondScreen.style.display = 'none';
     startScreen.style.display = 'flex';
     inputField.value = '';
+    currentLevel = 'easy';
     resetTimer();
     stopTimer();
 })
