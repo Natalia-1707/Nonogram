@@ -17,6 +17,54 @@ fontAwesomeLink.rel = 'stylesheet';
 fontAwesomeLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css';
 document.head.appendChild(fontAwesomeLink);
 
+// MUSIC //
+
+let blackCellSound = document.createElement('audio');
+blackCellSound.preload = 'auto';
+blackCellSound.src = 'sounds/blackcell.mp3';
+blackCellSound.style.display = 'none';
+document.body.appendChild(blackCellSound);
+
+let cancelCellSound = document.createElement('audio');
+cancelCellSound.preload = 'auto';
+cancelCellSound.src = 'sounds/cancelcell.mp3';
+cancelCellSound.style.display = 'none';
+document.body.appendChild(cancelCellSound);
+
+let deleteCellSound = document.createElement('audio');
+deleteCellSound.preload = 'auto';
+deleteCellSound.src = 'sounds/deletecell.mp3';
+deleteCellSound.style.display = 'none';
+document.body.appendChild(deleteCellSound);
+
+let winSound = document.createElement('audio');
+winSound.preload = 'auto';
+winSound.src = 'sounds/win.mp3';
+winSound.style.display = 'none';
+document.body.appendChild(winSound);
+
+
+function playblackCell() {
+    blackCellSound.currentTime = 0;
+    blackCellSound.play();
+}
+
+function playCancelCell() {
+    cancelCellSound.currentTime = 0;
+    cancelCellSound.play();
+}
+
+function playDeleteCell() {
+    deleteCellSound.currentTime = 0;
+    deleteCellSound.play();
+}
+
+function playWin() {
+    winSound.currentTime = 0;
+    winSound.play();
+}
+
+
 // JSON //
 
 let jsonTemplates = {};
@@ -313,15 +361,36 @@ function createPlayField(matrixSize, template, templateName) {
             cell.setAttribute('data-i', i);
             cell.setAttribute('data-j', j);
             cell.addEventListener('click', () => {
+                playblackCell();
                 startTimer();
+                let icon = cell.querySelector('i');
+                if (icon) {
+                    icon.remove();
+                }
+                if (grid[i][j] === 0) {
+                    if (!cell.classList.contains('cell-button-wrong')) {
+                        cell.classList.add('cell-button-wrong');
+                        console.log(`Ячейка [${i}, ${j}] неверна!`);
+                    } else {
+                        cell.classList.remove('cell-button-wrong');
+                        playDeleteCell();
+                        console.log(`Удалена ошибка на ячейке [${i}, ${j}]`);
+                    }
+                } else {
+                    cell.classList.remove('cell-button-wrong');
+                }
                 cell.classList.toggle('cell-button-active');
                 currentState[i][j] = cell.classList.contains('cell-button-active') ? 1 : 0;
-                console.log("currentState", currentState);
-                console.log("grid", grid);
+            
 
                 cellStatus(cell, i, j, currentState, grid, templateName);
             });
             cell.addEventListener('contextmenu', (event) => {
+                if (cell.classList.contains('cell-button-wrong')) {
+                    cell.classList.remove('cell-button-wrong');
+                    playDeleteCell();
+                }
+                playCancelCell();
                 startTimer();
                 event.preventDefault();
                 let clicks = parseInt(cell.getAttribute('data-clicks')) || 0;
@@ -335,11 +404,9 @@ function createPlayField(matrixSize, template, templateName) {
                     cell.appendChild(icon);
                     if (grid[i][j] === 1) {
                         cell.classList.add('cell-button-wrong');
-                        setTimeout(() => {
-                            cell.classList.remove('cell-button-wrong');
-                        }, 500);
                     }
                     if (grid[i][j] === 0) {
+                        cell.classList.remove('cell-button-wrong');
                         cell.classList.add('cell-button-disabled-i');
                         cell.classList.add('cell-button-disabled');
                     }
@@ -370,10 +437,6 @@ function cellStatus(cell, i, j, currentState, grid, templateName) {
     } else if (currentState[i][j] === 0) {
         cell.classList.remove('cell-button-disabled');
     } else {
-        cell.classList.add('cell-button-wrong');
-        setTimeout(() => {
-            cell.classList.remove('cell-button-wrong');
-        }, 500);
         console.log(`Ячейка [${i}, ${j}] неверна!`);
     }
 
@@ -409,6 +472,7 @@ function checkWin(currentState, grid, templateName) {
         stopTimer();
         saveResult(playerName, templateName, currentLevel, totalSeconds);
         setTimeout(() => {
+            playWin();
             alert("Поздравляем! Вы выиграли!");
         }, 100);
     }
