@@ -729,9 +729,9 @@ let templateOneMedium = document.createElement('button');
 templateOneMedium.classList.add('one-medium-button');
 let oneImgMedium = document.createElement('img');
 oneImgMedium.src = './img/question mark.jpeg';
-oneImgMedium.alt = 'Question mark';
+oneImgMedium.alt = 'Question';
 let oneTextMedium = document.createElement('div');
-oneTextMedium.textContent = "Question mark";
+oneTextMedium.textContent = "Question";
 oneTextMedium.classList.add('one-text-medium');
 templateOneMedium.append(oneImgMedium);
 templateOneMedium.append(oneTextMedium);
@@ -988,7 +988,7 @@ resetBtn.textContent = 'Reset game';
 resetBtn.classList.add('reset-button');
 
 let randomGameBtn = document.createElement('button');
-randomGameBtn.classList.add('new-game-button')
+randomGameBtn.classList.add('random-game-button')
 randomGameBtn.textContent = 'Random Game';
 
 
