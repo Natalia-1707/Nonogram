@@ -1085,6 +1085,8 @@ backButton.addEventListener('click', () => {
     currentLevel = 'easy';
     resetTimer();
     stopTimer();
+    resultsSave = JSON.parse(localStorage.getItem('resultsSave')) || [];
+    updateResults(resultsSave);
 })
 
 // RESULTS //
