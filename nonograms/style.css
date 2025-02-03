@@ -568,6 +568,9 @@ body.win-message-open .win-message {
 
 .top-hints > .col-hint-container:nth-child(5n) {
     border-right: 2px solid black;
+    display: flex;
+    align-items: stretch;
+    height: 100%;
 }
 
 .col-hint-container {
@@ -602,6 +605,14 @@ body.win-message-open .win-message {
 
 .row:nth-child(5n) {
     border-bottom: 2px solid black;
+}
+
+.top-hints > .col-hint-container:last-child {
+    border-right: none;
+}
+
+.left-hints > .row-hint-container:last-child {
+    border-bottom: none;
 }
 
 .cell-button:hover{

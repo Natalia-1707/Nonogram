@@ -17,6 +17,13 @@ fontAwesomeLink.rel = 'stylesheet';
 fontAwesomeLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css';
 document.head.appendChild(fontAwesomeLink);
 
+// FAVICON //
+
+let faviconLink = document.createElement('link');
+faviconLink.rel = 'shortcut icon';
+faviconLink.href = 'img/favicon-32x32.png';
+document.head.appendChild(faviconLink);
+
 // MUSIC //
 
 let blackCellSound = document.createElement('audio');
@@ -369,6 +376,7 @@ function createPlayField(matrixSize, template, templateName) {
                 if (icon) {
                     icon.remove();
                 }
+                let isActive = cell.classList.contains('cell-button-active');
                 if (grid[i][j] === 0) {
                     if (!cell.classList.contains('cell-button-wrong')) {
                         cell.classList.add('cell-button-wrong');
@@ -379,17 +387,24 @@ function createPlayField(matrixSize, template, templateName) {
                 } else {
                     cell.classList.remove('cell-button-wrong');
                 }
-                playblackCell();
                 cell.classList.toggle('cell-button-active');
                 currentState[i][j] = cell.classList.contains('cell-button-active') ? 1 : 0;
-            
-
+                if (isActive && !cell.classList.contains('cell-button-active')) {
+                    playDeleteCell();
+                } else {
+                    playblackCell();
+                }
+        
                 cellStatus(cell, i, j, currentState, grid, templateName);
             });
             cell.addEventListener('contextmenu', (event) => {
-                if (cell.classList.contains('cell-button-wrong')) {
+                if (cell.classList.contains('cell-button-wrong') && grid[i][j] === 1) {
                     cell.classList.remove('cell-button-wrong');
                     playDeleteCell();
+                }
+                if (cell.classList.contains('cell-button-wrong') && grid[i][j] === 0) {
+                    cell.classList.remove('cell-button-wrong');
+                    playCancelCell();
                 }
                 playCancelCell();
                 startTimer();
