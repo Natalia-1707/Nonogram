@@ -1,0 +1,935 @@
+.reggae-one-regular {
+    font-family: "Reggae One", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.jost {
+    font-family: "Jost", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    background-color:  rgb(192, 192, 192);
+}
+
+body {
+    display: flex;
+    justify-content: center;
+}
+
+/* INITIAL SCREEN  */
+
+.start-screen,
+.second-screen,
+.play-field {
+    height: auto;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    background-color: transparent;
+    z-index: 10;
+}
+.start-screen,
+.second-screen {
+    flex-direction: column;
+    gap: 2rem;
+}
+.start-screen {
+    width: 90%;
+}
+.second-screen {
+    width: 70%;
+    display: none;
+    padding-bottom: 1rem;
+}
+
+.play-field {
+    width: 100%;
+}
+.title {
+    width: auto;
+    height: auto;
+    margin: 0;
+    text-align: center;
+    font-family: "Reggae One", serif;
+    font-size: clamp(2rem, 10vw, 10rem);
+    color: rgb(0, 51, 25);
+}
+.input-field {
+    width: 30%;
+    height: auto;
+    margin: auto;
+    padding: 0.5rem;
+    border: 0.2rem solid rgb(0, 51, 25);
+    border-radius: 1.5rem;
+    text-align: center;
+    font-family: "Jost", serif;
+    font-size: 3rem;
+    transition: transform 0.2s;
+}
+.input-field[type="text"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+.input-field[type="text"] {
+    -moz-appearance: textfield;
+    appearance: none;
+}
+.input-field[type="text"]::-ms-clear {
+    display: none;
+}
+.start-button,
+.results-button {
+    width: 20%;
+    height: auto;
+    margin: auto;
+    padding: 0.5rem;
+    border: 0.2rem solid rgb(0, 51, 25);
+    border-radius: 1.5rem;
+    text-align: center;
+    font-family: "Jost", serif;
+    font-size: 3rem;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+.start-button:hover,
+.results-button:hover {
+    background-color: rgb(0, 51, 25);
+    color: white;
+    transform: scale(1.05); 
+}
+
+.table {
+    width: 90%;
+    height: auto;
+    border-top: 0.4375rem solid rgb(0, 51, 25);
+    border-collapse: collapse;
+    table-layout: fixed;
+    text-align: center;
+    margin-bottom: 0.9375rem;
+    border: 0.0625rem solid rgb(0, 51, 25);
+    font-family: "Jost", serif;
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+.no-results {
+    width: auto;
+    height: auto;
+    font-family: "Jost", serif;
+    font-weight: 400;
+    font-size: 2.5rem;
+}
+
+td {
+    margin: 0;
+    text-align: center;
+    padding: 0.2125rem;
+    border: 0.1875rem solid rgb(0, 51, 25);
+}
+th {
+    text-align: center;
+    padding: 0.2125rem;
+    border: 0.1875rem solid rgb(0, 51, 25);;
+}
+.td2 {
+    margin: 0;
+    display: flex;
+    border: 0.09375rem solid rgb(0, 51, 25);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+.results-img {
+    width: 4rem;
+    height: 4rem;
+}
+/* START GAME */
+.level-div {
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+    font-family: "Jost", serif;
+}
+.choose-level {
+    width: 90%;
+    height: auto;
+    margin: auto;
+    text-align: center;
+    font-family: "Reggae One", serif;
+    font-size: 2rem;
+    color: rgb(0, 51, 25);
+}
+.level-buttons {
+    width: 100%;
+    height: auto;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+}
+.easy-button,
+.medium-button,
+.hard-button,
+.reset-button,
+.random-game-button {
+    width: 15rem;
+    height: auto;
+    padding: 0.1rem;
+    border: 0.2rem solid rgb(0, 51, 25);
+    border-radius: 1.5rem;
+    text-align: center;
+    font-family: "Jost", serif;
+    font-size: 1.5rem;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+.easy-button:hover,
+.medium-button:hover,
+.hard-button:hover,
+.reset-button:hover,
+.random-game-button:hover {
+    background-color: rgb(0, 51, 25);
+    color: white;
+    transform: scale(1.05); 
+}
+.easy-button-disabled,
+.medium-button-disabled,
+.hard-button-disabled,
+.reset-button-disabled,
+.random-game-button-disabled {
+    border: 0.2rem solid rgb(192, 192, 192);
+    color: rgb(192, 192, 192);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+/* LEVEL CHOSE */
+
+.easy-list,
+.medium-list,
+.hard-list,
+.results-window {
+    position: absolute;
+    width: 70%;
+    max-height: 90vh;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1.875rem;
+    border: 0.125rem solid rgb(0, 51, 25);
+    border-radius: 1rem;
+    background-color: white;
+    visibility: hidden;
+    transition: transform 0.5s ease;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+.results-window {
+    gap: 1rem;
+}
+
+.easy-list.show,
+.medium-list.show,
+.hard-list.show,
+.results-window.show {
+    visibility: visible;
+    transform: translateX(-50%) scale(1);
+    box-shadow: rgba(55, 55, 56, 0.5) 0 0 0 500rem;
+}
+
+body.easy-list-open,
+body.medium-list-open,
+body.hard-list-open,
+body.results-window-open,
+body.win-message-open {
+    pointer-events: none;
+}
+
+body.easy-list-open .easy-list,
+body.medium-list-open .medium-list,
+body.hard-list-open .hard-list,
+body.results-window-open .results-window,
+body.win-message-open .win-message {
+    pointer-events: auto;
+}
+
+.easy-list-title,
+.medium-list-title,
+.hard-list-title {
+    width: auto;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin-top: 2rem;
+}
+.results-title {
+    font-size: 2.5rem;
+}
+.easy-list-title,
+.medium-list-title,
+.hard-list-title {
+    font-family: "Jost", serif;
+    font-size: 3rem;
+}
+
+.results-title {
+    font-family: "Reggae One", serif;
+    color: rgb(0, 51, 25);
+}
+
+.easy-buttons-div,
+.medium-buttons-div,
+.hard-buttons-div {
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.one-easy-button,
+.two-easy-button,
+.three-easy-button,
+.four-easy-button,
+.five-easy-button,
+.one-medium-button,
+.two-medium-button,
+.three-medium-button,
+.four-medium-button,
+.five-medium-button,
+.one-hard-button,
+.two-hard-button,
+.three-hard-button,
+.four-hard-button,
+.five-hard-button {
+    width: 14rem;
+    height: 14rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 1rem;
+    gap: 1.25rem;
+    align-items: center;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.one-easy-button:hover,
+.two-easy-button:hover,
+.three-easy-button:hover,
+.four-easy-button:hover,
+.five-easy-button:hover,
+.one-medium-button:hover,
+.two-medium-button:hover,
+.three-medium-button:hover,
+.four-medium-button:hover,
+.five-medium-button:hover,
+.one-hard-button:hover,
+.two-hard-button:hover,
+.three-hard-button:hover,
+.four-hard-button:hover,
+.five-hard-button:hover {
+    transform: scale(1.05);
+}
+
+.easy-list img,
+.medium-list img,
+.hard-list img {
+    width: 7rem;
+    height: 7rem;
+}
+
+.one-text,
+.two-text,
+.three-text,
+.four-text,
+.five-text,
+.one-text-medium,
+.two-text-medium,
+.three-text-medium,
+.four-text-medium,
+.five-text-medium,
+.one-text-hard,
+.two-text-hard,
+.three-text-hard,
+.four-text-hard,
+.five-text-hard {
+    font-family: "Reggae One", serif;
+    font-size: 2rem;
+    color: rgb(0, 51, 25);
+}
+
+.cancel-button,
+.cancel-button2,
+.cancel-button3,
+.cancel-button-results,
+.cancel-button-message {
+    position: absolute;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: transparent;
+    border: none;
+    background-color: transparent;
+}
+.cancel-button,
+.cancel-button2,
+.cancel-button3 {
+    top: 5%;
+    right: 1rem;
+}
+
+.cancel-button-results {
+    top: 7.5%;
+    right: 1rem;
+}
+.cancel-button-message {
+    top: 8%;
+    right: 1rem;
+}
+
+.cancel-button i,
+.cancel-button2 i,
+.cancel-button3 i,
+.cancel-button-results i,
+.cancel-button-message i {
+    color: rgb(64, 64, 64);
+    transition: color 0.3s;
+    font-size: 1.5rem;
+}
+
+.cancel-button:hover i,
+.cancel-button2:hover i,
+.cancel-button3:hover i,
+.cancel-button-results:hover i,
+.cancel-button-message:hover i  {
+    font-size: 2rem;
+    color: rgb(0, 51, 25);
+}
+
+.win-message {
+    position: absolute;
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+    padding: 3rem;
+    border: 0.3rem solid rgb(0, 51, 25);
+    border-radius: 1rem;
+    background-color: rgb(255, 255, 255);
+    font-family: "Reggae One", serif;
+    color: rgb(0, 51, 25);
+    font-size: 2rem;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotateX(10deg);
+    z-index: 1;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 4px 6px rgba(0, 0, 0, 0.2);
+    perspective: 1000px;
+    z-index: 10;
+}
+
+.message-new-game-button {
+    width: 30%;
+    height: auto;
+    padding: 0.5rem;
+    border: 0.2rem solid rgb(0, 51, 25);
+    border-radius: 1.5rem;
+    text-align: center;
+    font-family: "Jost", serif;
+    font-size: 1.5rem;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+.message-new-game-button:hover {
+    background-color: rgb(0, 51, 25);
+    color: white;
+    transform: scale(1.05); 
+}
+
+/* PLAY FIELD */
+
+.extra-options {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 2rem;
+}
+.second-screen-header {
+    width: auto;
+    height: auto;
+    font-family: "Reggae One", serif;
+    color: rgb(0, 51, 25);
+    font-size: 3rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2rem;
+}
+
+.timer {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.back-button {
+    transition: transform 0.2s;
+    color: rgb(0, 51, 25);
+    font-family: "Reggae One", serif;
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    margin-right: 0;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    transform: scale(1.3);
+}
+
+.play-area {
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    padding: 2rem;
+    background-color: transparent;
+}
+
+.game-field {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 10px;                       
+    align-items: center;
+}
+
+.top-hints {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    border-bottom: 2px solid black;
+    margin-left: 0;
+    gap: 0;
+    font-size: 25px;
+    text-align: center;
+    align-items: center;
+}
+
+.left-hints {
+    display: grid;
+    grid-auto-flow: row;
+    grid-auto-rows: 1fr;
+    border-right: 2px solid black;
+    gap: 0;
+    font-size: 25px;
+    align-items: center;
+    text-align: right;
+}
+
+.left-hints > .row-hint-container:nth-child(5n) {
+    border-bottom: 2px solid black;
+}
+
+
+.top-hints > .col-hint-container:nth-child(5n) {
+    border-right: 2px solid black;
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+}
+
+.col-hint-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.row-hint-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.5rem;
+    padding-right: 10px;
+}
+
+.row {
+    display: flex;
+}
+.cell-button {
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    background-color: white;
+    border: 1px solid rgb(0, 51, 25);
+    cursor: pointer;
+}
+
+.cell-button:nth-child(5n) {
+    border-right: 2px solid black;
+}
+
+.row:nth-child(5n) {
+    border-bottom: 2px solid black;
+}
+
+.top-hints > .col-hint-container:last-child {
+    border-right: none;
+}
+
+.left-hints > .row-hint-container:last-child {
+    border-bottom: none;
+}
+
+.cell-button:hover{
+    border: 3px solid rgb(0, 51, 25);
+}
+.cell-button-active {
+    background-color: rgb(0, 51, 25);
+}
+.cell-button-wrong {
+   outline: 0.2rem solid red;
+   z-index: 2;
+}
+.cell-button.cell-button-wrong:hover {
+    outline: 0.2rem solid red;
+}
+
+.cell-button i {
+    font-size: 1.5rem;
+    color: rgb(0, 51, 25);
+}
+
+.cell-button-disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.cell-button-disabled-i {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+
+/* MEDIA */
+
+@media screen and (max-width: 1500px) {
+    .one-easy-button,
+    .two-easy-button,
+    .three-easy-button,
+    .four-easy-button,
+    .five-easy-button,
+    .one-medium-button,
+    .two-medium-button,
+    .three-medium-button,
+    .four-medium-button,
+    .five-medium-button,
+    .one-hard-button,
+    .two-hard-button,
+    .three-hard-button,
+    .four-hard-button,
+    .five-hard-button {
+        width: 10rem;
+        height: 10rem;
+    }
+    .easy-list img,
+    .medium-list img,
+    .hard-list img {
+        width: 5rem;
+        height: 5rem;
+    }
+    .one-text,
+    .two-text,
+    .three-text,
+    .four-text,
+    .five-text,
+    .one-text-medium,
+    .two-text-medium,
+    .three-text-medium,
+    .four-text-medium,
+    .five-text-medium,
+    .one-text-hard,
+    .two-text-hard,
+    .three-text-hard,
+    .four-text-hard,
+    .five-text-hard {
+        font-size: 1.5rem;
+    }
+    .easy-list-title,
+    .medium-list-title,
+    .hard-list-title {
+        font-size: 2.5rem;
+    }
+    .win-message {
+        font-size: 1.8rem;
+    }
+}
+@media screen and (max-width: 1400px) {
+    .second-screen  {
+        width: 90%;
+    }
+    .play-field {
+        width: 95%;
+        gap: 4rem;
+    }
+}
+@media screen and (max-width: 1325px) {
+    .input-field {
+        width: 50%;
+        font-size: 2rem;
+    }
+    .start-button {
+        width: 30%;
+        font-size: 2rem;
+    }
+    .results-button {
+        width: 30%;
+        font-size: 2rem;
+    }
+    .results-title {
+        font-size: 2rem;
+    }
+}
+@media screen and (max-width: 1100px) {
+    .win-message {
+        font-size: 1.8rem;
+    }
+
+    .message-new-game-button {
+        width: 60%;
+    }
+}
+@media screen and (max-width: 900px) {
+    .play-field {
+        gap: 0rem;
+    }
+    .play-area {
+        padding: 0;
+    }
+    .reset-button,
+    .random-game-button,
+    .easy-button,
+    .medium-button,
+    .hard-button {
+        width: 10rem;
+        font-size: 1rem;
+    }
+    .back-button {
+        font-size: 1.5rem;
+    }
+    .second-screen-header {
+        font-size: 1.5rem;
+    }
+    .level-div {
+        width: 100%;
+        height: auto;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        text-align: flex-end;
+        font-family: "Jost", serif;
+    }
+    .choose-level {
+        width: 90%;
+        height: auto;
+        margin: auto;
+        text-align: center;
+        font-family: "Reggae One", serif;
+        font-size: 1.5rem;
+        color: rgb(0, 51, 25);
+    }
+    .easy-list-title,
+    .medium-list-title,
+    .hard-list-title {
+        font-size: 2rem;
+    }
+    .one-text,
+    .two-text,
+    .three-text,
+    .four-text,
+    .five-text,
+    .one-text-medium,
+    .two-text-medium,
+    .three-text-medium,
+    .four-text-medium,
+    .five-text-medium,
+    .one-text-hard,
+    .two-text-hard,
+    .three-text-hard,
+    .four-text-hard,
+    .five-text-hard {
+        font-size: 1.2rem;
+    }
+    .win-message {
+        width: 60%;
+        font-size: 1.5rem;
+    }
+
+    .message-new-game-button {
+        width: 60%;
+    }
+}
+@media screen and (max-width: 700px) {
+    .input-field {
+        width: 60%;
+        font-size: 2rem;
+    }
+    .start-button {
+        width: 40%;
+        font-size: 2rem;
+    }
+    .results-button {
+        width: 40%;
+        font-size: 2rem;
+    }
+    .cell-button {
+        width: 25px;
+        height: 25px;
+        box-sizing: border-box;
+        background-color: white;
+        border: 1px solid rgb(0, 51, 25);
+        cursor: pointer;
+    }
+    .left-hints {
+        font-size: 1.3125rem;
+    }
+    .top-hints {
+        font-size: 1.3125rem;
+    }
+    .results-title {
+        font-size: 1.7rem;
+    }
+    .win-message {
+        width: 60%;
+        padding: 2rem;
+        font-size: 1.3rem;
+    }
+    .message-new-game-button {
+        width: 50%;
+        font-size: 1.3rem;
+    }
+}
+@media screen and (max-width: 600px) {
+    .second-screen {
+        width: 100%;
+        margin: auto;
+    }
+    .play-field {
+        flex-direction: column;
+        gap: 2rem;
+        margin-top: 1rem;
+    }
+    .play-area {
+        margin: auto;
+    }
+    .cell-button {
+        width: 19px;
+        height: 19px;
+    }
+    .left-hints {
+        font-size: 1.0125rem
+    }
+    .top-hints {
+        font-size: 1.0125rem
+    }
+    .extra-options {
+        width: 100%;
+        flex-direction: row;
+        padding: 0;
+        gap: 0.5rem;
+    }
+    .reset-button,
+    .random-game-button,
+    .easy-button,
+    .medium-button,
+    .hard-button {
+        font-size: 0.7rem;
+        padding: 0;
+    }
+    .reset-button,
+    .random-game-button {
+        width: 6rem;
+    }
+    .easy-button,
+    .medium-button,
+    .hard-button {
+        width: 4rem;
+    }
+    .back-button {
+        font-size: 1rem;
+    }
+    .second-screen-header {
+        font-size: 1.3rem;
+    }
+    .level-div {
+        width: auto;
+        text-align: center;
+        margin: 0;
+    }
+    .level-buttons {
+        width: auto;
+        gap: 0.5rem;
+        flex-direction: row;
+    }
+    .choose-level {
+        display: none;
+    }
+    .results-title {
+        font-size: 1.3rem;
+    }
+    .table {
+        font-size: 0.7rem;
+    }
+    .results-img {
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+    .cancel-button-results {
+        font-size: 1.2rem;
+        top: 5%;
+        right: 1rem;
+    }
+    .cancel-button-results i {
+        color: rgb(64, 64, 64);
+        transition: color 0.3s;
+        font-size: 1.2rem;
+    }
+    .win-message {
+        top: 40%;
+    }
+}
